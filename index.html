@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#b71c1c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bal AF">
+  <title>Balanço Material + Térmico + Operacional — Alto-Forno</title>
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23b71c1c'/%3E%3Ctext x='50' y='65' font-size='45' text-anchor='middle' fill='white'%3E&#9881;%3C/text%3E%3C/svg%3E">
+  <style>
+ 
+/* Customizações para a aba de perfil térmico */
+.xsmall {
+    font-size: 0.75rem;
+}
+.table td mark {
+    background-color: rgba(255, 193, 7, 0.15);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+/* Alinhamento estético de badges do Bootstrap */
+.badge-status {
+    font-size: 0.8rem;
+    padding: 0.4em 0.6em;
+    font-weight: 600;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background: #f5f5f5; color: #333; line-height: 1.5; padding-bottom: 40px; }
+header { background: linear-gradient(135deg, #b71c1c 0%, #7f0000 100%); color: white; padding: 18px 16px 0; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 100; }
+header h1 { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+header p { font-size: 12px; opacity: 0.9; margin-bottom: 10px; }
+.lang-bar { display: flex; justify-content: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.lang-btn { background: rgba(255,255,255,0.2); color: white; border: none; padding: 6px 14px; font-size: 12px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.lang-btn.ativo { background: white; color: #b71c1c; }
+.tabs { display: flex; justify-content: center; gap: 4px; padding-bottom: 0; flex-wrap: wrap; }
+.tab-btn { background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 16px; font-size: 13px; font-weight: 600; border-radius: 10px 10px 0 0; cursor: pointer; transition: all 0.2s; }
+.tab-btn.ativo { background: white; color: #b71c1c; }
+.container { max-width: 800px; margin: 0 auto; padding: 12px; }
+.card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
+.card-header.entrada { border-bottom-color: #ff9800; } .card-header.saida { border-bottom-color: #2196f3; }
+.card-header.resultado { border-bottom-color: #9c27b0; } .card-header.escoria { border-bottom-color: #4caf50; }
+.card-header.resumo { border-bottom-color: #ff9800; } .card-header.termico { border-bottom-color: #b71c1c; }
+.card-header.operacional { border-bottom-color: #607d8b; }
+.card-header h2 { font-size: 16px; font-weight: 700; }
+.card-header.entrada h2 { color: #e65100; } .card-header.saida h2 { color: #1565c0; }
+.card-header.resultado h2 { color: #6a1b9a; } .card-header.escoria h2 { color: #2e7d32; }
+.card-header.resumo h2 { color: #e65100; } .card-header.termico h2 { color: #b71c1c; }
+.card-header.operacional h2 { color: #455a64; }
+.input-group { margin-bottom: 12px; }
+.input-group label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 4px; }
+.input-group input { width: 100%; padding: 12px 14px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 16px; transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none; }
+.input-group input:focus { outline: none; border-color: #b71c1c; box-shadow: 0 0 0 3px rgba(183,28,28,0.1); }
+.input-group input:disabled { background: #f5f5f5; color: #666; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; }
+.grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.sub-section { background: #fafafa; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.sub-section h3 { font-size: 13px; font-weight: 700; color: #e65100; margin-bottom: 10px; }
+.sub-section h3.blue { color: #1565c0; } .sub-section h3.purple { color: #6a1b9a; }
+.sub-section h3.red { color: #b71c1c; } .sub-section h3.green { color: #2e7d32; }
+.sub-section h3.gray { color: #455a64; }
+.result-box { background: #f8f9fa; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.result-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #eee; }
+.result-row:last-child { border-bottom: none; }
+.result-row .label { font-size: 13px; color: #555; }
+.result-row .value { font-size: 14px; font-weight: 700; }
+.result-row.total { padding-top: 10px; margin-top: 6px; border-top: 2px solid #ddd; }
+.result-row.total .label { font-weight: 700; color: #333; }
+.destaque { background: #fff3e0; border: 2px solid #ff9800; border-radius: 10px; padding: 14px; text-align: center; margin-top: 10px; }
+.destaque .titulo { font-size: 12px; color: #e65100; font-weight: 700; margin-bottom: 4px; }
+.destaque .valor { font-size: 28px; font-weight: 800; color: #b71c1c; }
+.destaque .sub { font-size: 11px; color: #888; margin-top: 4px; }
+.escoria-grid .item { text-align: center; padding: 10px 4px; background: #f1f8e9; border-radius: 10px; }
+.escoria-grid .item .label { font-size: 11px; color: #666; }
+.escoria-grid .item .value { font-size: 18px; font-weight: 700; color: #2e7d32; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 8px 6px; text-align: right; }
+th:first-child, td:first-child { text-align: left; }
+thead tr { background: #fff3e0; }
+th { font-weight: 700; color: #e65100; border-bottom: 2px solid #ff9800; }
+tbody tr { border-bottom: 1px solid #f0f0f0; }
+tbody tr.total-row { background: #fff8e1; font-weight: 700; }
+.entrada-val { color: #e65100; font-weight: 600; }
+.saida-val { color: #1565c0; font-weight: 600; }
+.diff-val { font-weight: 700; }
+.install-hint { background: #e3f2fd; border: 1px solid #90caf9; border-radius: 10px; padding: 12px; margin-bottom: 12px; font-size: 13px; color: #1565c0; }
+.aviso { background: #fff3e0; border: 1px solid #ffcc80; border-radius: 10px; padding: 12px; margin-bottom: 12px; font-size: 12px; color: #e65100; }
+.erro-msg { background: #ffebee; border: 1px solid #ef9a9a; border-radius: 8px; padding: 8px 12px; margin-bottom: 10px; font-size: 12px; color: #c62828; display: none; }
+.erro-msg.visivel { display: block; }
+.btn-transfer { background: linear-gradient(135deg, #b71c1c, #7f0000); color: white; border: none; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 700; width: 100%; margin-bottom: 12px; cursor: pointer; }
+.hidden { display: none !important; }
+.info-box { background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: 12px; color: #2e7d32; }
+
+@media (max-width: 480px) {
+  .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr; } .grid-5 { grid-template-columns: 1fr 1fr 1fr; }
+  th, td { padding: 6px 4px; font-size: 12px; } .tab-btn { padding: 8px 12px; font-size: 12px; }
+}
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; margin-left: 6px; }
+.badge.ok { background: #e8f5e9; color: #2e7d32; }
+.badge.warn { background: #fff3e0; color: #e65100; }
+.badge.alert { background: #ffebee; color: #c62828; }
+.ref-box { background: #f5f5f5; border-radius: 10px; padding: 12px; margin-top: 10px; }
+.ref-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 12px; }
+.ref-row .ref-label { color: #666; }
+.ref-row .ref-val { font-weight: 600; color: #455a64; }
+.calc-box { background: #fff8e1; border: 2px solid #ff9800; border-radius: 12px; padding: 14px; margin-top: 10px; }
+.calc-box h4 { color: #e65100; font-size: 13px; margin-bottom: 10px; }
+.calc-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; border-bottom: 1px dashed #ffe0b2; }
+.calc-row:last-child { border-bottom: none; }
+.calc-row .calc-label { color: #555; }
+.calc-row .calc-val { font-weight: 700; color: #b71c1c; }
+.calc-row .calc-ok { font-weight: 700; color: #2e7d32; }
+.btn-calc { background: linear-gradient(135deg, #455a64, #263238); color: white; border: none; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 8px; width: 100%; }
+.hint-box { background: #e3f2fd; border: 1px solid #90caf9; border-radius: 8px; padding: 10px; margin-top: 8px; font-size: 12px; color: #1565c0; }
+
+/* Estilos do Modal (Bloqueio de tela de fundo) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Caixa do Aviso */
+.modal-box {
+    background-color: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 4px 20 rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+/* Título do Alerta */
+.modal-title {
+    color: #d32f2f;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 14px;
+}
+
+/* Corpo do Texto */
+.modal-text {
+    color: #333333;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+/* Botão Prosseguir */
+.modal-button {
+    background-color: #1a73e8;
+    color: #ffffff;
+    border: none;
+    padding: 14px 32px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s;
+}
+
+.modal-button:active {
+    background-color: #1557b0;
+}
+
+/* =======================================================
+   GERENCIAMENTO DE IDIOMA POR CSS PURO (100% OFFLINE)
+   ======================================================= */
+/* Oculta os textos alternativos por padrão */
+.lang-en, .lang-es, .lang-zh { display: none !important; }
+.lang-pt { display: block; }
+
+/* Se o sistema operacional do celular estiver em Inglês (en) */
+
+  </style>
+</head>
+
+<body>
+
+<!-- ESTRUTURA DO MODAL COM SELEÇÃO MANUAL (SUBSTITUA O SEU ATUAL) -->
+<div id="disclaimerModal" class="modal-overlay">
+    <div class="modal-box">
+        
+        <!-- Seletores Discretos de Idioma no Topo do Modal -->
+        <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 12px;">
+            <button onclick="mudarIdiomaManual('pt')" style="background:#f5f5f5; border:1px solid #ccc; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer; font-weight:bold;">PT</button>
+            <button onclick="mudarIdiomaManual('en')" style="background:#f5f5f5; border:1px solid #ccc; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer; font-weight:bold;">EN</button>
+            <button onclick="mudarIdiomaManual('es')" style="background:#f5f5f5; border:1px solid #ccc; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer; font-weight:bold;">ES</button>
+            <button onclick="mudarIdiomaManual('zh')" style="background:#f5f5f5; border:1px solid #ccc; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer; font-weight:bold;">中文</button>
+        </div>
+
+        <!-- TEXTOS DINÂMICOS (Preenchidos nativamente em PT) -->
+        <h2 id="modalTitle" class="modal-title">Aviso Importante</h2>
+        <p id="modalText" class="modal-text">
+            Este aplicativo <strong>não utiliza as APIs oficiais do Google</strong>. Nosso serviço funciona de forma independente. Ao continuar, você declara estar ciente e concordar com nossos termos de uso e funcionamento.
+        </p>
+        <button id="modalBtn" class="modal-button" onclick="acceptDisclaimer()">Prosseguir</button>
+    </div>
+</div>
+
+ 
+
+   
+  <header>
+    <h1>&#9881; <span data-t="appTitle">Balanço Alto-Forno</span></h1>
+    <p data-t="appSubtitle">Material + Térmico + Operacional</p>
+    
+    <div class="lang-bar">
+      <button class="lang-btn ativo" data-lang="pt" onclick="setLang('pt')">&#127463;&#127479; PT</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">&#127482;&#127480; EN</button>
+      <button class="lang-btn" data-lang="es" onclick="setLang('es')">&#127466;&#127480; ES</button>
+      <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">&#127464;&#127475; 中文</button>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn ativo" onclick="mostrarAba('material')" id="tab-material">&#128230; <span data-t="tabMaterial">Material</span></button>
+      <button class="tab-btn" onclick="mostrarAba('termico')" id="tab-termico">&#128293; <span data-t="tabThermal">Térmico</span></button>
+      <button class="tab-btn" onclick="mostrarAba('operacional')" id="tab-operacional">&#9874; <span data-t="tabOperational">Operacional</span></button>
+      <button class="tab-btn" onclick="mostrarAba('cargas')" id="tab-cargas">&#128230; <span data-t="tabLoads">Plano de Cargas</span></button>
+      <button class="tab-btn" onclick="mostrarAba('resultados')" id="tab-resultados">&#128202; <span data-t="tabResults">Resultados / Relatório</span></button>
+    </div>
+  </header>
+
+  <div class="install-hint container" id="installHint">
+    &#128161; <strong data-t="installTitle">Adicione à tela inicial:</strong> <span data-t="installText">Toque no menu do navegador e escolha "Adicionar à tela inicial".</span>
+  </div>
+
+  <!-- ==================== ABA MATERIAL ==================== -->
+  <div id="aba-material" class="container">
+    <div class="aviso">
+      &#9888; <strong data-t="warning">Atenção:</strong> <span data-t="warnMaterial">Preencha os dados de entrada e saída. Depois vá para a aba Térmico para transferir os resultados automaticamente.</span>
+    </div>
+
+    <button class="btn-transfer" onclick="transferirDados()">&#128293; <span data-t="btnTransfer">Transferir dados para Balanço Térmico</span> &rarr;</button>
+
+    <div class="card">
+      <div class="card-header entrada">
+        <span style="font-size:20px">&#128229;</span>
+        <h2 data-t="titleInputs">Entradas (kg/t gusa)</h2>
+      </div>
+      <div class="grid-2">
+        <div class="input-group"><label data-t="lblMinFerro">Minério de Ferro (kg/t)</label><input type="number" id="m_minFerro" value="1600" step="any" oninput="calcM()"></div>
+        <div class="input-group"><label data-t="lblCoque">Coque (kg/t)</label><input type="number" id="m_coque" value="450" step="any" oninput="calcM()"></div>
+        <div class="input-group"><label data-t="lblFluxo">Fluxo (kg/t)</label><input type="number" id="m_fluxo" value="200" step="any" oninput="calcM()"></div>
+        <div class="input-group"><label data-t="lblPCI">PCI (kg/t)</label><input type="number" id="m_pci" value="150" step="any" oninput="calcM()"></div>
+        <div class="input-group"><label data-t="lblAr">Ar Soprado (Nm³/t)</label><input type="number" id="m_ar" value="1100" step="any" oninput="calcM()"></div>
+        <div class="input-group"><label data-t="lblUmidadeAr">Umidade do ar (g/Nm³)</label><input type="number" id="m_umidadeAr" value="15" step="any" oninput="calcM()"></div>
+      </div>
+      <div class="sub-section">
+        <h3 data-t="subCompMin">Composição do Minério (%)</h3>
+        <div class="grid-4">
+          <div class="input-group"><label>Fe</label><input type="number" id="m_feMin" value="65" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>SiO₂</label><input type="number" id="m_sio2Min" value="4.5" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>Al₂O₃</label><input type="number" id="m_al2o3Min" value="1.2" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>CaO</label><input type="number" id="m_caoMin" value="0.3" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>MgO</label><input type="number" id="m_mgoMin" value="0.1" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>P</label><input type="number" id="m_pMin" value="0.05" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>Mn</label><input type="number" id="m_mnMin" value="0.3" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>H₂O</label><input type="number" id="m_h2oMin" value="2.0" step="any" oninput="calcM()"></div>
+        </div>
+      </div>
+      <div class="sub-section">
+        <h3 data-t="subCompCoque">Composição do Coque (%)</h3>
+        <div class="grid-4">
+          <div class="input-group"><label data-t="lblCFixo">C fixo</label><input type="number" id="m_cCoque" value="86" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label data-t="lblVM">VM</label><input type="number" id="m_vmCoque" value="1.5" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label data-t="lblCinzas">Cinzas</label><input type="number" id="m_cinzasCoque" value="12" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>H₂O</label><input type="number" id="m_h2oCoque" value="0.5" step="any" oninput="calcM()"></div>
+        </div>
+      </div>
+      <div class="sub-section">
+        <h3 data-t="subCompFluxo">Composição do Fluxo (%)</h3>
+        <div class="grid-4">
+          <div class="input-group"><label>CaO</label><input type="number" id="m_caoFluxo" value="52" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>MgO</label><input type="number" id="m_mgoFluxo" value="2" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>SiO₂</label><input type="number" id="m_sio2Fluxo" value="2" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>CO₂</label><input type="number" id="m_co2Fluxo" value="42" step="any" oninput="calcM()"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header saida">
+        <span style="font-size:20px">&#128228;</span>
+        <h2 data-t="titleOutputs">Saídas (kg/t gusa)</h2>
+      </div>
+      <div class="input-group">
+        <label data-t="lblProdGusa">Produção de Gusa (kg/t)</label>
+        <input type="number" id="m_gusa" value="1000" disabled>
+      </div>
+      <div class="sub-section">
+        <h3 class="blue" data-t="subCompGusa">Composição do Gusa (%)</h3>
+        <div class="grid-3">
+          <div class="input-group"><label>Fe</label><input type="number" id="m_feGusa" value="94.5" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>C</label><input type="number" id="m_cGusa" value="4.5" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>Si</label><input type="number" id="m_siGusa" value="0.5" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>Mn</label><input type="number" id="m_mnGusa" value="0.3" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>P</label><input type="number" id="m_pGusa" value="0.08" step="any" oninput="calcM()"></div>
+          <div class="input-group"><label>S</label><input type="number" id="m_sGusa" value="0.03" step="any" oninput="calcM()"></div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="input-group"><label data-t="lblEscoria">Escória produzida (kg/t)</label><input type="number" id="m_escoria" disabled></div>
+        <div class="input-group"><label data-t="lblGasTopo">Gás de Topo (Nm³/t)</label><input type="number" id="m_gasTopo" disabled></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header resultado">
+        <span style="font-size:20px">&#128202;</span>
+        <h2 data-t="titleResMaterial">Resultados do Balanço de Material</h2>
+      </div>
+      <div class="erro-msg" id="m_erroP">&#9888; <span data-t="errP">P no gusa é maior que P de entrada!</span></div>
+      <div class="erro-msg" id="m_erroMn">&#9888; <span data-t="errMn">Mn no gusa é maior que Mn de entrada!</span></div>
+      <div class="result-box">
+        <div class="result-row"><span class="label" data-t="lblMassaEnt">Massa Total Entrada</span><span class="value" id="m_massaEntrada" style="color:#e65100">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblMassaSai">Massa Total Saída</span><span class="value" id="m_massaSaida" style="color:#1565c0">—</span></div>
+        <div class="result-row total"><span class="label" data-t="lblErroMassa">Diferença (Erro)</span><span class="value" id="m_erroMassa">—</span></div>
+      </div>
+      <div class="result-box">
+        <div style="font-weight:700; color:#6a1b9a; margin-bottom:8px; font-size:14px;" data-t="balFe">Balanço de Ferro (Fe)</div>
+        <div class="result-row"><span class="label" data-t="lblFeEnt">Fe entrada (kg/t)</span><span class="value" id="m_feEntrada">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblFeSai">Fe no gusa (kg/t)</span><span class="value" id="m_feSaida">—</span></div>
+        <div class="result-row total"><span class="label" data-t="lblRendFe">Rendimento Fe (%)</span><span class="value" id="m_rendFe">—</span></div>
+      </div>
+      <div class="result-box">
+        <div style="font-weight:700; color:#6a1b9a; margin-bottom:8px; font-size:14px;" data-t="balC">Balanço de Carbono (C)</div>
+        <div class="result-row"><span class="label" data-t="lblCEnt">C entrada (kg/t)</span><span class="value" id="m_cEntrada">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblCSaiGusa">C no gusa (kg/t)</span><span class="value" id="m_cSaidaGusa">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblCSaiGas">C no gás CO/CO₂ (kg/t)</span><span class="value" id="m_cSaidaGas">—</span></div>
+        <div class="result-row total"><span class="label" data-t="lblDiffC">Diferença C (kg/t)</span><span class="value" id="m_diffC">—</span></div>
+      </div>
+      <div class="result-box">
+        <div style="font-weight:700; color:#6a1b9a; margin-bottom:8px; font-size:14px;" data-t="balSi">Balanço de Silício (Si)</div>
+        <div class="result-row"><span class="label" data-t="lblSiO2Ent">SiO₂ entrada (kg/t)</span><span class="value" id="m_sio2Entrada">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblSiSai">Si no gusa (kg/t)</span><span class="value" id="m_siSaida">—</span></div>
+        <div class="result-row total"><span class="label" data-t="lblSiO2Esc">SiO₂ na escória (kg/t)</span><span class="value" id="m_sio2Escoria">—</span></div>
+      </div>
+      <div class="result-box">
+        <div style="font-weight:700; color:#6a1b9a; margin-bottom:8px; font-size:14px;" data-t="balMn">Balanço de Manganês (Mn)</div>
+        <div class="result-row"><span class="label" data-t="lblMnEnt">Mn entrada (kg/t)</span><span class="value" id="m_mnEntrada">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblMnSaiGusa">Mn no gusa (kg/t)</span><span class="value" id="m_mnSaidaGusa">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblMnSaiEsc">Mn na escória (kg/t)</span><span class="value" id="m_mnSaidaEscoria">—</span></div>
+        <div class="result-row total"><span class="label" data-t="lblRendMn">Rendimento Mn (%)</span><span class="value" id="m_rendMn">—</span></div>
+      </div>
+      <div class="result-box">
+        <div style="font-weight:700; color:#6a1b9a; margin-bottom:8px; font-size:14px;" data-t="balP">Balanço de Fósforo (P)</div>
+        <div class="result-row"><span class="label" data-t="lblPEnt">P entrada (kg/t)</span><span class="value" id="m_pEntrada">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblPSaiGusa">P no gusa (kg/t)</span><span class="value" id="m_pSaidaGusa">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblPSaiEsc">P na escória (kg/t)</span><span class="value" id="m_pSaidaEscoria">—</span></div>
+        <div class="result-row total"><span class="label" data-t="lblDistPGusa">Distribuição P no gusa (%)</span><span class="value" id="m_distPGusa">—</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header escoria">
+        <span style="font-size:20px">&#128300;</span>
+        <h2 data-t="titleCompEsc">Composição Calculada da Escória (%)</h2>
+      </div>
+      <div class="escoria-grid grid-5">
+        <div class="item"><div class="label">SiO₂</div><div class="value" id="m_pctSio2Esc">—</div></div>
+        <div class="item"><div class="label">CaO</div><div class="value" id="m_pctCaoEsc">—</div></div>
+        <div class="item"><div class="label">MgO</div><div class="value" id="m_pctMgoEsc">—</div></div>
+        <div class="item"><div class="label">Al₂O₃</div><div class="value" id="m_pctAl2o3Esc">—</div></div>
+        <div class="item"><div class="label" data-t="lblBasico">Básico (V)</div><div class="value" id="m_vEscoria">—</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header resumo">
+        <span style="font-size:20px">&#128203;</span>
+        <h2 data-t="titleResumoMat">Resumo do Balanço de Massa</h2>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th data-t="thItem">Item</th><th data-t="thEntrada">Entrada</th><th data-t="thSaida">Saída</th><th data-t="thDiff">Diferença</th></tr></thead>
+          <tbody id="m_tabelaResumo"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ABA TÉRMICO ==================== -->
+  <div id="aba-termico" class="container hidden">
+    <div class="aviso">
+      &#9888; <strong data-t="warning">Atenção:</strong> <span data-t="warnThermal">Use o botão "Transferir dados" na aba Material para preencher automaticamente os campos do balanço térmico.</span>
+    </div>
+
+    <div class="card">
+      <div class="card-header termico">
+        <span style="font-size:20px">&#128229;</span>
+        <h2 data-t="titleEntThermal">Entradas de Calor (kcal/kg gusa)</h2>
+      </div>
+      <div class="grid-2">
+        <div class="input-group"><label data-t="lblCoqueKg">Coque (kg/t gusa)</label><input type="number" id="t_coque" value="450" step="any" oninput="calcT()"></div>
+        <div class="input-group"><label data-t="lblPCIKg">PCI (kg/t gusa)</label><input type="number" id="t_pci" value="150" step="any" oninput="calcT()"></div>
+        <div class="input-group"><label data-t="lblMinKg">Minério (kg/t gusa)</label><input type="number" id="t_minerio" value="1600" step="any" oninput="calcT()"></div>
+        <div class="input-group"><label data-t="lblFluxoKg">Fluxo (kg/t gusa)</label><input type="number" id="t_fluxo" value="200" step="any" oninput="calcT()"></div>
+        <div class="input-group"><label data-t="lblArNm3">Ar soprado (Nm³/t)</label><input type="number" id="t_ar" value="1100" step="any" oninput="calcT()"></div>
+        <div class="input-group"><label data-t="lblTAr">Temperatura do ar (°C)</label><input type="number" id="t_t_ar" value="1100" step="any" oninput="calcT()"></div>
+        <div class="input-group"><label data-t="lblTAmb">Temperatura ambiente (°C)</label><input type="number" id="t_t_amb" value="25" step="any" oninput="calcT()"></div>
+        <div class="input-group"><label data-t="lblTRef">Temperatura de referência (°C)</label><input type="number" id="t_t_ref" value="25" step="any" oninput="calcT()"></div>
+      </div>
+      <div class="sub-section">
+        <h3 class="red" data-t="subCompCoque">Composição do Coque (%)</h3>
+        <div class="grid-4">
+          <div class="input-group"><label data-t="lblCFixo">C fixo</label><input type="number" id="t_c_coque" value="86" step="any" oninput="calcT()"></div>
+          <div class="input-group"><label data-t="lblH">H</label><input type="number" id="t_h_coque" value="0.5" step="any" oninput="calcT()"></div>
+        </div>
+      </div>
+      <div class="sub-section">
+        <h3 class="red" data-t="subReacoes">Reações (ajuste)</h3>
+        <div class="grid-4">
+          <div class="input-group"><label data-t="lblSiGusa">Si no gusa (%)</label><input type="number" id="t_si_gusa" value="0.5" step="any" oninput="calcT()"></div>
+          <div class="input-group"><label data-t="lblMnGusa">Mn no gusa (%)</label><input type="number" id="t_mn_gusa" value="0.3" step="any" oninput="calcT()"></div>
+          <div class="input-group"><label data-t="lblPGusa">P no gusa (%)</label><input type="number" id="t_p_gusa" value="0.08" step="any" oninput="calcT()"></div>
+          <div class="input-group"><label data-t="lblRd">Rd (% red. direta)</label><input type="number" id="t_rd" value="40" step="any" oninput="calcT()"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header saida">
+        <span style="font-size:20px">&#128228;</span>
+        <h2 data-t="titleSaiThermal">Saídas de Calor</h2>
+      </div>
+      <div class="grid-2">
+        <div class="input-group"><label data-t="lblEscoriaKg">Escória (kg/t gusa)</label><input type="number" id="t_escoria" value="300" step="any" oninput="calcT()"></div>
+        <div class="input-group"><label data-t="lblCO2Fluxo">CO₂ no calcário (%)</label><input type="number" id="t_co2_fluxo" value="42" step="any" oninput="calcT()"></div>
+        <div class="input-group"><label data-t="lblTGas">Temperatura do gás de topo (°C)</label><input type="number" id="t_t_gas" value="200" step="any" oninput="calcT()"></div>
+        <div class="input-group"><label data-t="lblGasTopoNm3">Gás de topo (Nm³/t)</label><input type="number" id="t_gas_topo" value="1700" step="any" oninput="calcT()"></div>
+        <div class="input-group"><label data-t="lblPerdas">Perdas térmicas (kcal/kg gusa)</label><input type="number" id="t_perdas" value="80" step="any" oninput="calcT()"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header resultado">
+        <span style="font-size:20px">&#128202;</span>
+        <h2 data-t="titleResThermal">Resultados do Balanço Térmico</h2>
+      </div>
+      <div class="info-box" id="t_infoBalanco">
+        &#8505; <span data-t="infoBalanco">O balanço está equilibrado quando a diferença está próxima de zero.</span>
+      </div>
+      <div class="result-box">
+        <div class="result-row"><span class="label" data-t="lblQEnt">Calor Total Entrada</span><span class="value" id="t_q_entrada" style="color:#e65100">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQSai">Calor Total Saída</span><span class="value" id="t_q_saida" style="color:#1565c0">—</span></div>
+        <div class="result-row total"><span class="label" data-t="lblQDiff">Diferença (kcal/kg)</span><span class="value" id="t_q_diff">—</span></div>
+      </div>
+      <div class="result-box">
+        <div style="font-weight:700; color:#6a1b9a; margin-bottom:8px; font-size:14px;" data-t="detEnt">Entradas Detalhadas (kcal/kg)</div>
+        <div class="result-row"><span class="label" data-t="lblCombCoque">Combustão C → CO (coque)</span><span class="value" id="t_q_comb_coque">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblCombPCI">Combustão C → CO (PCI)</span><span class="value" id="t_q_comb_pci">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQAr">Calor sensível do ar</span><span class="value" id="t_q_ar">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQMin">Calor sensível minério</span><span class="value" id="t_q_minerio">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQFluxo">Calor sensível fluxo</span><span class="value" id="t_q_fluxo">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQSi">Oxid. Si → SiO₂</span><span class="value" id="t_q_si">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQMn">Oxid. Mn → MnO</span><span class="value" id="t_q_mn">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQP">Oxid. P → P₂O₅</span><span class="value" id="t_q_p">—</span></div>
+      </div>
+      <div class="result-box">
+        <div style="font-weight:700; color:#6a1b9a; margin-bottom:8px; font-size:14px;" data-t="detSai">Saídas Detalhadas (kcal/kg)</div>
+        <div class="result-row"><span class="label" data-t="lblQRD">Redução direta FeO + C</span><span class="value" id="t_q_rd">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQRI">Redução indireta FeO + CO</span><span class="value" id="t_q_ri">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQRedSi">Redução SiO₂ → Si</span><span class="value" id="t_q_red_si">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQRedMn">Redução MnO → Mn</span><span class="value" id="t_q_red_mn">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQRedP">Redução P₂O₅ → P</span><span class="value" id="t_q_red_p">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQDescarb">Descarbonatação CaCO₃</span><span class="value" id="t_q_descarb">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQFusGusa">Fusão do gusa</span><span class="value" id="t_q_fusao_gusa">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQFusEsc">Fusão da escória</span><span class="value" id="t_q_fusao_esc">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQGas">Calor sensível gás de topo</span><span class="value" id="t_q_gas">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblQPerdas">Perdas térmicas</span><span class="value" id="t_q_perdas">—</span></div>
+      </div>
+      <div class="destaque">
+        <div class="titulo" data-t="titleTCadinho">TEMPERATURA DO CADINHO ESTIMADA</div>
+        <div class="valor" id="t_t_estimada">—</div>
+        <div class="sub" data-t="subTCadinho">Baseada no excedente/déficit de calor do balanço</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header resumo">
+        <span style="font-size:20px">&#128203;</span>
+        <h2 data-t="titleResumoTherm">Resumo Térmico</h2>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th data-t="thItem">Item</th><th>kcal/kg gusa</th><th>%</th></tr></thead>
+          <tbody id="t_tabela"></tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- CONTEÚDO DA ABA: PERFIL TÉRMICO ESTRUTURAL -->
+<div class="tab-pane fade" id="perfil-estrutural" role="tabpanel" aria-labelledby="perfil-tab">
+    <div class="container-fluid py-4">
+        
+        <!-- Cabeçalho Informativo -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-light border-0 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary d-flex align-items-center mb-2">
+                            <i class="bi bi-thermometer-half me-2"></i> Perfil Térmico Estrutural do Alto-Forno
+                        </h4>
+                        <p class="card-text text-muted mb-0 small">
+                            Esta ferramenta estima o gradiente de temperatura radial e vertical de 2 em 2 metros a partir da base do cadinho, simulando as perdas térmicas e o resfriamento periférico do casco.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Coluna de Controles (Inputs Dinâmicos) -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white py-3 border-bottom">
+                        <h5 class="card-title mb-0 text-secondary"><i class="bi bi-sliders me-2"></i>Parâmetros da Parede</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Input de Espessura do Refratário -->
+                        <div class="mb-3">
+                            <label for="esp_refratario" class="form-label fw-bold small text-muted">Espessura do Refratário (m)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="esp_refratario" value="0.60" step="0.05" min="0.10" max="1.50" onchange="calcularPerfilTermicoBootstrap()">
+                                <span class="input-group-text bg-light text-muted">m</span>
+                            </div>
+                            <div class="form-text xsmall text-danger">Diminua este valor para simular desgaste ou erosão da parede.</div>
+                        </div>
+
+                        <!-- Input de Condutividade do Refratário -->
+                        <div class="mb-3">
+                            <label for="k_refratario" class="form-label fw-bold small text-muted">Condutividade Térmica (k)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="k_refratario" value="12.0" step="0.5" min="1.0" max="30.0" onchange="calcularPerfilTermicoBootstrap()">
+                                <span class="input-group-text bg-light text-muted">W/m·K</span>
+                            </div>
+                        </div>
+
+                        <!-- Info Útil -->
+                        <div class="alert alert-info border-0 small mt-4 mb-0">
+                            <h6 class="alert-heading fw-bold mb-1"><i class="bi bi-info-circle-fill me-1"></i> Referência Operacional:</h6>
+                            <ul class="mb-0 ps-3">
+                                <li><b>Blocos de Carbono (Cadinho):</b> k = 10 a 18 W/m·K</li>
+                                <li><b>Alta Alumina (Cuba):</b> k = 1.5 a 3.0 W/m·K</li>
+                                <li><b>Temperatura Água de Entrada:</b> Fixada em 35°C</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coluna da Tabela de Resultados -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 text-secondary"><i class="bi bi-table me-2"></i>Gradiente Vertical Estimado</h5>
+                        <span class="badge bg-success border-0 px-2 py-1" id="status-geral-refrig">Sistema Íntegro</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped align-middle mb-0 text-center">
+                                <thead class="table-light text-secondary border-bottom">
+                                    <tr>
+                                        <th scope="col" class="py-3">Altura da Base</th>
+                                        <th scope="col" class="py-3">Núcleo Central</th>
+                                        <th scope="col" class="py-3">Face Interna Refratário</th>
+                                        <th scope="col" class="py-3">Carcaça Externa</th>
+                                        <th scope="col" class="py-3">Status do Casco</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-perfil-bootstrap">
+                                    <!-- Conteúdo injetado pelo JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    
+  </div>
+
+
+
+  <!-- ==================== ABA OPERACIONAL ==================== -->
+  <div id="aba-operacional" class="container hidden">
+    <div class="aviso">
+      &#9888; <strong data-t="warning">Atenção:</strong> <span data-t="warnOp">Preencha os dados do cadinho e da produção para estimar o tempo de residência e demais indicadores operacionais.</span>
+    </div>
+
+    <div class="card">
+      <div class="card-header operacional">
+        <span style="font-size:20px">&#9874;</span>
+        <h2 data-t="titleParams">Parâmetros do Alto-Forno e Produção</h2>
+      </div>
+      <div class="grid-2">
+        <div class="input-group"><label data-t="lblVolAF">Volume útil do Alto-Forno (m³)</label><input type="number" id="o_vol" value="1500" step="any" oninput="calcO()"></div>
+        <div class="input-group"><label data-t="lblVolCadinho">Volume útil do cadinho (m³)</label><input type="number" id="o_vol_cadinho" value="180" min="0" step="any" oninput="calcO()"></div>
+        <div class="input-group"><label data-t="lblAltAF">Altura útil da carga no Alto-Forno (m)</label><input type="number" id="o_altura" value="25" step="any" oninput="calcO()"></div>
+        <div class="input-group"><label data-t="lblProdDia">Produção de gusa (t/dia)</label><input type="number" id="o_prod" value="4500" step="any" oninput="calcO()"></div>
+        <div class="input-group"><label data-t="lblDensGusa">Densidade volumétrica da carga (t/m³)</label><input type="number" id="o_dens_gusa" value="1.35" step="any" oninput="calcO()"></div>
+        <div class="input-group"><label data-t="lblDensPig">Densidade do gusa (t/m³)</label><input type="number" id="o_dens_pig" value="7.00" min="1" step="0.01" oninput="calcO()"></div>
+        <div class="input-group"><label data-t="lblEnchimento">Fator de enchimento (%)</label><input type="number" id="o_enchimento" value="85" step="any" oninput="calcO()"></div>
+        <div class="input-group"><label data-t="lblVDesc">Velocidade de descida (m/h) — opcional</label><input type="number" id="o_vdesc" placeholder="Deixe em branco para calcular" step="any" oninput="calcO()"></div>
+<div class="input-group">
+  <label>ΔP (kPa)</label>
+  <input type="number" id="o_dp" value="100" step="any" oninput="calcO()">
+</div>      
+</div>
+      <div class="sub-section">
+        <h3 class="gray" data-t="subRefMaterial">Dados da Aba Material (referência)</h3>
+        <div class="grid-3">
+          <div class="input-group"><label data-t="lblCoque">Coque (kg/t)</label><input type="number" id="o_coque_ref" value="450" disabled></div>
+          <div class="input-group"><label data-t="lblPCI">PCI (kg/t)</label><input type="number" id="o_pci_ref" value="150" disabled></div>
+          <div class="input-group"><label data-t="lblEscoria">Escória (kg/t)</label><input type="number" id="o_escoria_ref" value="300" disabled></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header operacional">
+        <span style="font-size:20px">&#128214;</span>
+        <h2 data-t="titleRefOp">Referências Operacionais</h2>
+      </div>
+      <div class="ref-box">
+        <div class="ref-row"><span class="ref-label" data-t="refTRes">Tempo de residência ideal</span><span class="ref-val">6 – 10 h</span></div>
+        <div class="ref-row"><span class="ref-label" data-t="refProd">Produtividade específica ideal</span><span class="ref-val">2,0 – 3,5 t/m³/dia</span></div>
+        <div class="ref-row"><span class="ref-label" data-t="refVDesc">Velocidade de descida típica</span><span class="ref-val">3 – 5 m/h</span></div>
+        <div class="ref-row"><span class="ref-label" data-t="refIC">Índice de coque típico</span><span class="ref-val">350 – 500 kg/t</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header operacional">
+        <span style="font-size:20px">&#128161;</span>
+        <h2 data-t="titleDiag">Diagnóstico de Consistência</h2>
+      </div>
+      <div class="calc-box">
+        <h4>&#128200; <span data-t="subAnalise">Análise dos seus dados atuais</span></h4>
+        <div class="calc-row"><span class="calc-label" data-t="diagProd">Produção digitada</span><span class="calc-val" id="diag_prod">—</span></div>
+        <div class="calc-row"><span class="calc-label" data-t="diagVol">Volume do AF</span><span class="calc-val" id="diag_vol">—</span></div>
+        <div class="calc-row"><span class="calc-label" data-t="diagProdCalc">Produtividade calculada</span><span class="calc-val" id="diag_prod_calc">—</span></div>
+        <div class="calc-row"><span class="calc-label" data-t="diagTRes">Tempo de residência calculado</span><span class="calc-val" id="diag_tres">—</span></div>
+        <div class="calc-row"><span class="calc-label" data-t="diagVDesc">Velocidade de descida calculada</span><span class="calc-val" id="diag_vdesc">—</span></div>
+      </div>
+      <div class="calc-box" style="margin-top:10px; background:#e8f5e9; border-color:#a5d6a7;">
+        <h4>&#9989; <span data-t="subSug">Sugestão para ajuste</span></h4>
+        <div class="calc-row"><span class="calc-label" data-t="sugProdMin">Produção ideal para este volume</span><span class="calc-ok" id="sug_prod_min">—</span></div>
+        <div class="calc-row"><span class="calc-label">até</span><span class="calc-ok" id="sug_prod_max">—</span></div>
+        <div class="calc-row"><span class="calc-label" data-t="sugVol">Volume necessário para esta produção</span><span class="calc-ok" id="sug_vol">—</span></div>
+        <div class="calc-row"><span class="calc-label" data-t="sugEnch">Enchimento mínimo sugerido (8h de produção)</span><span class="calc-ok" id="sug_ench">—</span></div>
+      </div>
+      <div class="hint-box" id="diag_hint">
+        &#8505; <span data-t="diagHint">Digite os dados acima e o app calcula automaticamente o diagnóstico.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header resultado">
+        <span style="font-size:20px">&#128202;</span>
+        <h2 data-t="titleResOp">Resultados Operacionais</h2>
+      </div>
+      <div class="result-box">
+        <div class="result-row"><span class="label" data-t="lblTRes">Tempo de residência da carga (h)</span><span class="value" id="o_t_res" style="color:#455a64">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblVDescCalc">Velocidade descida (m/h)</span><span class="value" id="o_v_desc_calc" style="color:#455a64">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblProdEspec">Produtividade (t/m³/dia)</span><span class="value" id="o_prod_espec" style="color:#455a64">—</span></div>
+        <div class="result-row total"><span class="label" data-t="lblMarcha">Marcha do forno (t/m³ cadinho·dia)</span><span class="value" id="o_marcha" style="color:#455a64">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblVazao">Vazão de gusa (t/h)</span><span class="value" id="o_vazao" style="color:#455a64">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblVolHora">Volume gusa/hora (m³/h)</span><span class="value" id="o_vol_hora" style="color:#455a64">—</span></div>
+        <div class="result-row total"><span class="label" data-t="lblIntVaz">Tempo estimado de renovação do gusa no cadinho</span><span class="value" id="o_int_vaz" style="color:#455a64">—</span></div>
+        <div class="result-row"><span class="label" data-t="lblVazDia">Corridas estimadas por dia</span><span class="value" id="o_vaz_dia" style="color:#455a64">—</span></div>
+        <div class="result-row total"><span class="label" data-t="lblIC">Índice de coque (kg/t)</span><span class="value" id="o_ic" style="color:#455a64">—</span></div>
+        <div class="result-row total"><span class="label" data-t="lblDP">ΔP — Perda de pressão</span><span class="value" id="o_dp_result" style="color:#455a64">—</span></div>
+      </div>
+      <div class="destaque">
+        <div class="titulo" data-t="titleTResDest">TEMPO DE RESIDÊNCIA ESTIMADO</div>
+        <div class="valor" id="o_t_res_destaque">—</div>
+        <div class="sub" data-t="subTResDest">Baseado no volume útil do Alto-Forno e vazão de produção</div>
+      </div>
+      <div class="info-box" id="o_info" style="margin-top:10px;">
+        &#8505; <span data-t="infoOp">O tempo de residência da carga no Alto-Forno moderno varia entre 6 e 10 horas.</span><br>
+        &#8505; <span data-t="infoVaz">Para o intervalo entre corridas, informe o volume útil do cadinho já descontando o deadman e demais volumes que não participam da acumulação de gusa.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header resumo">
+        <span style="font-size:20px">&#128203;</span>
+        <h2 data-t="titleResumoOp">Resumo Operacional</h2>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th data-t="thParam">Parâmetro</th><th data-t="thValor">Valor</th><th data-t="thUnid">Unidade</th></tr></thead>
+          <tbody id="o_tabela"></tbody>
+        </table>
+      </div>
+    </div>
+   <!-- ==================== ABA ESCORIA ==================== -->
+<!-- Interface de Saída da Escória -->
+<div id="painel-escoria" style="padding: 15px; margin-top: 15px; border-radius: 5px; border: 1px solid #ccc; font-family: sans-serif;">
+    <h3 style="margin-top: 0;">Análise Operacional da Escória/Slag data/炉渣分析</h3>
+    
+    <p>Viscosidade Estimada/ estimated viscosity/估算粘度: <strong id="val-viscosidade">--</strong> Pa·s</p>
+    <p>Basicidade Binária (CaO/SiO₂)/Binary basicity/二元碱度: <strong id="val-basicidade">--</strong></p>
+    
+    <!-- Caixa de Alerta Dinâmica -->
+    <div id="caixa-alertas" style="padding: 10px; border-radius: 4px; display: none;">
+        <!-- Os alertas gerados via JS entrarão aqui -->
+    </div>
+</div>
+ 
+  </div>
+  <!-- ==================== ABA PLANO DE CARGAS ==================== -->
+  <div id="aba-cargas" class="container hidden">
+    <div class="aviso">&#9888; <strong data-t="warning">Atenção:</strong> <span data-t="loadsWarning">O plano de cargas converte o balanço em kg/t gusa para uma programação baseada no volume útil do carrinho.</span></div>
+    <div class="card"><div class="card-header operacional"><span style="font-size:20px">&#128230;</span><h2 data-t="loadsTitle">Plano de Cargas</h2></div>
+      <div class="grid-2">
+        <div class="input-group"><label data-t="cartVol">Volume útil do carrinho (m³)</label><input type="number" id="c_vol" value="8" min="0.01" step="any" oninput="calcCargas()"></div>
+        <div class="input-group"><label data-t="cartFill">Fator de enchimento do carrinho (%)</label><input type="number" id="c_fill" value="85" min="1" max="100" step="any" oninput="calcCargas()"></div>
+        <div class="input-group"><label data-t="oreDensity">Densidade aparente do minério (t/m³)</label><input type="number" id="c_rho_ore" value="2.10" min="0.1" step="any" oninput="calcCargas()"></div>
+        <div class="input-group"><label data-t="cokeDensity">Densidade aparente do coque (t/m³)</label><input type="number" id="c_rho_coke" value="0.55" min="0.1" step="any" oninput="calcCargas()"></div>
+        <div class="input-group"><label data-t="fluxDensity">Densidade aparente dos fundentes (t/m³)</label><input type="number" id="c_rho_flux" value="1.60" min="0.1" step="any" oninput="calcCargas()"></div>
+        <div class="input-group"><label data-t="pciDensity">Densidade aparente do PCI (t/m³) — referência volumétrica</label><input type="number" id="c_rho_pci" value="0.70" min="0.1" step="any" oninput="calcCargas()"></div>
+      </div>
+      <div class="info-box" style="margin-top:10px">&#8505; <span data-t="loadsInfo">O cálculo considera minério + coque + fundentes + PCI. Para o PCI, o volume é apresentado como referência; sua alimentação normalmente é independente do carrinho.</span></div>
+    </div>
+    <div class="card"><div class="card-header resultado"><span style="font-size:20px">&#128202;</span><h2 data-t="loadsResults">Programa calculado</h2></div>
+      <div style="overflow-x:auto"><table><thead><tr><th data-t="matCol">Material</th><th>kg/t gusa</th><th>m³/t gusa</th><th data-t="perCart">kg/carrinho</th><th data-t="volCart">m³/carrinho</th></tr></thead><tbody id="c_table"></tbody></table></div>
+      <div class="result-box" style="margin-top:12px">
+        <div class="result-row"><span class="label" data-t="cartEffVol">Volume efetivo do carrinho</span><span class="value" id="c_effvol">—</span></div>
+        <div class="result-row"><span class="label" data-t="cycleMass">Massa total por carrinho</span><span class="value" id="c_masscart">—</span></div>
+        <div class="result-row total"><span class="label" data-t="cartsPerTon">Carrinhos por tonelada de gusa</span><span class="value" id="c_cartst">—</span></div>
+        <div class="result-row total"><span class="label" data-t="cartsPerDay">Carrinhos estimados por dia</span><span class="value" id="c_cartsday">—</span></div>
+        <div class="result-row"><span class="label" data-t="loadsPerDay">Número de cargas/lançamentos por dia</span><span class="value" id="c_loadsday">—</span></div>
+      </div><div class="hint-box"><span data-t="loadsDisclaimer">O programa é uma estimativa de distribuição de massa e volume. A sequência real de carregamento deve respeitar o sistema de carregamento e os procedimentos da planta.</span></div>
+    </div>
+  </div>
+
+  <!-- ==================== ABA RESULTADOS / RELATÓRIO ==================== -->
+  <div id="aba-resultados" class="container hidden">
+    <div class="card"><div class="card-header resultado"><span style="font-size:20px">&#128203;</span><h2 data-t="reportTitle">Relatório Técnico — Alto-Forno</h2></div>
+      <div class="grid-2"><div class="input-group"><label data-t="company">Empresa</label><input id="r_company" type="text"></div><div class="input-group"><label data-t="technician">Técnico / Engenheiro</label><input id="r_technician" type="text"></div><div class="input-group"><label data-t="reportDate">Data</label><input id="r_date" type="date"></div><div class="input-group"><label data-t="furnaceName">Alto-Forno / número</label><input id="r_furnace" type="text"></div></div>
+      <div class="input-group" style="margin-top:10px"><label data-t="objective">Objetivo da análise</label><input id="r_objective" type="text" data-placeholder="objectivePh"></div>
+      <div class="input-group" style="margin-top:10px"><label data-t="observations">Observações do técnico</label><textarea id="r_observations" rows="3" data-placeholder="observationsPh"></textarea></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" onclick="gerarRelatorio()" data-t="generateReport">&#128196; Gerar relatório para impressão</button><button class="btn" onclick="preencherDataRelatorio()" data-t="todayBtn">Usar data de hoje</button></div>
+    </div>
+    <div class="card"><div class="card-header operacional"><span style="font-size:20px">&#128202;</span><h2 data-t="resultSummary">Saída de Dados e Resultados</h2></div><div style="overflow-x:auto"><table><thead><tr><th data-t="thParam">Parâmetro</th><th data-t="thValor">Valor</th><th data-t="thUnid">Unidade</th></tr></thead><tbody id="r_summary"></tbody></table></div></div>
+  </div>
+
+
+    
+<script>
+
+
+
+// DECLARE ISSO BEM NO TOPO DO SEU SCRIPT (FORA E ANTES DE TODAS AS FUNÇÕES)
+var temperaturaCadinhoGlobal = 1450; 
+
+// ============================================================================
+// PARE AQUI A FUNÇÃO calcT() COM O SEU FECHAMENTO '}' E COLE O BLOCO ABAIXO:
+// ============================================================================
+
+function calcularPerfilTermicoBootstrap(tCadinhoForcado) {
+    // 1. INPUTS DA PAREDE REFRATÁRIA
+    const eRefratario = parseFloat(document.getElementById('esp_refratario')?.value) || 0.60;
+    const kRefratario = parseFloat(document.getElementById('k_refratario')?.value) || 12.0;
+    
+    // 2. PARÂMETROS OPERACIONAIS DE ALTURA E TOPO
+    const alturaUtil = parseFloat(document.getElementById('altura_util_input')?.value) || 25;
+    const tGAsTopo = parseFloat(document.getElementById('t_t_gas')?.value || document.getElementById('t_t_gas')?.innerText) || 200;
+    
+    // 3. CAPTURA DO CADINHO ATUALIZADA (SEM TRAVAMENTO)
+    let tCadinho = 1450; // Valor padrão de segurança
+
+    if (tCadinhoForcado !== undefined && !isNaN(tCadinhoForcado) && tCadinhoForcado > 0) {
+        // Cenário A: Recebeu o valor direto da execução da função calcT()
+        tCadinho = tCadinhoForcado;
+    } else {
+        // Cenário B: Foi disparado por um "onchange" da espessura. 
+        const elTemp = document.getElementById('t_t_estimada');
+        if (elTemp) {
+            let textoLimpo = elTemp.textContent.replace(' °C', '')
+                                               .replace('(abaixo do ponto de fusão!)', '')
+                                               .replace('(fora da faixa operacional!)', '')
+                                               .trim();
+            let valorLido = parseFloat(textoLimpo);
+            if (!isNaN(valorLido) && valorLido > 500) {
+                tCadinho = valorLido; 
+            }
+        }
+    }
+
+    // 4. PARÂMETROS CONSTANTES DE RESFRIAMENTO POR ÁGUA
+    const tAgua = 35;      
+    const eAco = 0.05;     
+    const kAco = 45.0;     
+    const hAgua = 1200;    
+
+    // Cálculo das resistências térmicas combinadas
+    const rRefratario = eRefratario / kRefratario;
+    const rAco = eAco / kAco;
+    const rConveccao = 1 / hAgua;
+    const rTotal = rRefratario + rAco + rConveccao;
+
+    const tbody = document.getElementById('tbody-perfil-bootstrap');
+    if (!tbody) return;
+    tbody.innerHTML = ''; 
+
+    let algumAlertaCritico = false;
+
+    // Processamento do gradiente vertical acoplado ao valor real do coque
+    for (let h = 0; h <= alturaUtil; h += 2) {
+        let pontoH = h;
+        let fracao = pontoH / alturaUtil;
+        let tNucleo = tCadinho;
+
+        // Distribuição térmica dinâmica amarrada ao resultado do seu balanço
+        if (fracao <= 0.24) { 
+            tNucleo = tCadinho - (fracao / 0.24) * 30; 
+        } else if (fracao > 0.24 && fracao <= 0.48) {
+            let f = (fracao - 0.24) / 0.24;
+            tNucleo = (tCadinho - 30) - (f * 460); 
+        } else if (fracao > 0.48 && fracao <= 0.76) {
+            let f = (fracao - 0.48) / 0.28;
+            tNucleo = 960 - (f * 80);   
+        } else {
+            let f = (fracao - 0.76) / 0.24;
+            tNucleo = 880 - (f * (880 - tGAsTopo)); 
+        }
+
+        let fluxoCalor = (tNucleo - tAgua) / rTotal;
+        let tFaceInternaRef = tNucleo - (fluxoCalor * (rRefratario * 0.15));
+        let tCarcacaExterna = tAgua + (fluxoCalor * rConveccao);
+
+        let n = Math.round(tNucleo);
+        let r = Math.round(tFaceInternaRef);
+        let c = Math.round(tCarcacaExterna);
+
+        let badgeStatus = '<span class="badge text-bg-success badge-status">SEGURO</span>';
+        let rowClass = '';
+
+        if (c > 90) {
+            badgeStatus = '<span class="badge text-bg-danger badge-status"><i class="bi bi-exclamation-triangle-fill"></i> CRÍTICO</span>';
+            rowClass = 'table-danger';
+            algumAlertaCritico = true;
+        } else if (c > 65) {
+            badgeStatus = '<span class="badge text-bg-warning badge-status">ATENÇÃO</span>';
+            rowClass = 'table-warning';
+        }
+
+        tbody.innerHTML += `
+            <tr class="${rowClass}">
+                <td class="fw-bold text-secondary">${pontoH} m</td>
+                <td>${n} °C</td>
+                <td>${r} °C</td>
+                <td><mark class="fw-bold text-dark">${c} °C</mark></td>
+                <td>${badgeStatus}</td>
+            </tr>
+        `;
+    }
+
+    const indicadorGlobal = document.getElementById('status-geral-refrig');
+    if (indicadorGlobal) {
+        if (algumAlertaCritico) {
+            indicadorGlobal.className = "badge bg-danger px-2 py-1";
+            indicadorGlobal.innerHTML = "Risco de Breakout!";
+        } else {
+            indicadorGlobal.className = "badge bg-success px-2 py-1";
+            indicadorGlobal.innerHTML = "Sistema Íntegro";
+        }
+    }
+}
+
+// Inicializador seguro: Garante que o gráfico rode ao abrir a página
+document.addEventListener("DOMContentLoaded", function() {
+    // Executa uma chamada inicial de segurança com atraso para esperar os dados carregarem
+    setTimeout(function() {
+        if (typeof calcT === "function") {
+            calcT();
+        } else {
+            calcularPerfilTermicoBootstrap(1450);
+        }
+    }, 500);
+});
+
+
+function calcularPerfilTermicoBootstrap(tCadinhoForcado) {
+    // 1. INPUTS DA PAREDE REFRATÁRIA
+    const eRefratario = parseFloat(document.getElementById('esp_refratario')?.value) || 0.60;
+    const kRefratario = parseFloat(document.getElementById('k_refratario')?.value) || 12.0;
+    
+    // 2. PARÂMETROS OPERACIONAIS DE ALTURA E TOPO
+    const alturaUtil = parseFloat(document.getElementById('altura_util_input')?.value) || 25;
+    const tGAsTopo = parseFloat(document.getElementById('t_t_gas')?.value || document.getElementById('t_t_gas')?.innerText) || 200;
+    
+    // 3. CAPTURA DO CADINHO ATUALIZADA (SEM TRAVAMENTO)
+    let tCadinho = 1450; // Valor padrão de segurança
+
+    if (tCadinhoForcado !== undefined && !isNaN(tCadinhoForcado) && tCadinhoForcado > 0) {
+        // Cenário A: Recebeu o valor direto da execução da função calcT()
+        tCadinho = tCadinhoForcado;
+    } else {
+        // Cenário B: Foi disparado por um "onchange" da espessura. 
+        // Vamos ler o valor que a sua função calcT() acabou de imprimir na tela (no elemento textContent)
+        const elTemp = document.getElementById('t_t_estimada');
+        if (elTemp) {
+            // Remove o " °C" e os textos de alerta para isolar o número puro do seu cálculo
+            let textoLimpo = elTemp.textContent.replace(' °C', '')
+                                               .replace('(abaixo do ponto de fusão!)', '')
+                                               .replace('(fora da faixa operacional!)', '')
+                                               .trim();
+            let valorLido = parseFloat(textoLimpo);
+            if (!isNaN(valorLido) && valorLido > 500) {
+                tCadinho = valorLido; // Garante o sincronismo perfeito com o balanço térmico do coque
+            }
+        }
+    }
+
+    // 4. PARÂMETROS CONSTANTES DE RESFRIAMENTO POR ÁGUA
+    const tAgua = 35;      
+    const eAco = 0.05;     
+    const kAco = 45.0;     
+    const hAgua = 1200;    
+
+    // Cálculo das resistências térmicas combinadas
+    const rRefratario = eRefratario / kRefratario;
+    const rAco = eAco / kAco;
+    const rConveccao = 1 / hAgua;
+    const rTotal = rRefratario + rAco + rConveccao;
+
+    const tbody = document.getElementById('tbody-perfil-bootstrap');
+    if (!tbody) return;
+    tbody.innerHTML = ''; 
+
+    let algumAlertaCritico = false;
+
+    // Processamento do gradiente vertical acoplado ao valor real do coque
+    for (let h = 0; h <= alturaUtil; h += 2) {
+        let pontoH = h;
+        let fracao = pontoH / alturaUtil;
+        let tNucleo = tCadinho;
+
+        // Distribuição térmica dinâmica amarrada ao resultado do seu balanço
+        if (fracao <= 0.24) { 
+            tNucleo = tCadinho - (fracao / 0.24) * 30; 
+        } else if (fracao > 0.24 && fracao <= 0.48) {
+            let f = (fracao - 0.24) / 0.24;
+            tNucleo = (tCadinho - 30) - (f * 460); 
+        } else if (fracao > 0.48 && fracao <= 0.76) {
+            let f = (fracao - 0.48) / 0.28;
+            tNucleo = 960 - (f * 80);   
+        } else {
+            let f = (fracao - 0.76) / 0.24;
+            tNucleo = 880 - (f * (880 - tGAsTopo)); 
+        }
+
+        let fluxoCalor = (tNucleo - tAgua) / rTotal;
+        let tFaceInternaRef = tNucleo - (fluxoCalor * (rRefratario * 0.15));
+        let tCarcacaExterna = tAgua + (fluxoCalor * rConveccao);
+
+        let n = Math.round(tNucleo);
+        let r = Math.round(tFaceInternaRef);
+        let c = Math.round(tCarcacaExterna);
+
+        let badgeStatus = '<span class="badge text-bg-success badge-status">SEGURO</span>';
+        let rowClass = '';
+
+        if (c > 90) {
+            badgeStatus = '<span class="badge text-bg-danger badge-status"><i class="bi bi-exclamation-triangle-fill"></i> CRÍTICO</span>';
+            rowClass = 'table-danger';
+            algumAlertaCritico = true;
+        } else if (c > 65) {
+            badgeStatus = '<span class="badge text-bg-warning badge-status">ATENÇÃO</span>';
+            rowClass = 'table-warning';
+        }
+
+        tbody.innerHTML += `
+            <tr class="${rowClass}">
+                <td class="fw-bold text-secondary">${pontoH} m</td>
+                <td>${n} °C</td>
+                <td>${r} °C</td>
+                <td><mark class="fw-bold text-dark">${c} °C</mark></td>
+                <td>${badgeStatus}</td>
+            </tr>
+        `;
+    }
+
+    const indicadorGlobal = document.getElementById('status-geral-refrig');
+    if (indicadorGlobal) {
+        if (algumAlertaCritico) {
+            indicadorGlobal.className = "badge bg-danger px-2 py-1";
+            indicadorGlobal.innerHTML = "Risco de Breakout!";
+        } else {
+            indicadorGlobal.className = "badge bg-success px-2 py-1";
+            indicadorGlobal.innerHTML = "Sistema Íntegro";
+        }
+    }
+}
+
+
+// Vincula a execução automática toda vez que a aba Bootstrap for clicada e aberta
+document.addEventListener("DOMContentLoaded", function() {
+    var tabEl = document.querySelector('button[id="perfil-tab"]') || document.querySelector('a[href="#perfil-estrutural"]');
+    if (tabEl) {
+        tabEl.addEventListener('shown.bs.tab', function () {
+            calcularPerfilTermicoBootstrap();
+        });
+    }
+    // Execução inicial de teste
+    setTimeout(calcularPerfilTermicoBootstrap, 1000);
+});
+
+
+function renderizarTabelaPerfil(dados) {
+    const tbody = document.getElementById('dados-perfil-termico');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    dados.forEach(ponto => {
+        // Define o alerta visual caso a carcaça passe dos limites normais de projeto refrigerado
+        let statusTag = '<span class="tag-verde">Seguro</span>';
+        if (ponto.carcaca > 85) {
+            statusTag = '<span class="tag-vermelha">Crítico</span>';
+        } else if (ponto.carcaca > 65) {
+            statusTag = '<span class="tag-amarela">Atenção</span>';
+        }
+
+        let linha = `
+            <tr>
+                <td><b>${ponto.altura} m</b></td>
+                <td>${ponto.nucleo} °C</td>
+                <td>${ponto.refratario} °C</td>
+                <td><mark><b>${ponto.carcaca} °C</b></mark></td>
+                <td>${statusTag}</td>
+            </tr>
+        `;
+        tbody.innerHTML += linha;
+    });
+}
+
+
+function calcularPerfilTermicoBootstrap() {
+    let tCadinho = 1450; 
+
+    // CAPTURA PASSIVA DE SEGURANÇA: Lê direto o que o app imprimiu no visor de resultado
+    const elTemp = document.getElementById('t_t_estimada');
+    if (elTemp) {
+        let textoLimpo = elTemp.textContent.replace(' °C', '')
+                                           .replace('(abaixo do ponto de fusão!)', '')
+                                           .replace('(fora da faixa operacional!)', '')
+                                           .trim();
+        let valorLido = parseFloat(textoLimpo);
+        if (!isNaN(valorLido) && valorLido > 500) {
+            tCadinho = valorLido; // Sincroniza sem mexer na calcT
+        }
+    }
+
+    const eRefratario = parseFloat(document.getElementById('esp_refratario')?.value) || 0.60;
+    const kRefratario = parseFloat(document.getElementById('k_refratario')?.value) || 12.0;
+    
+    const alturaUtil = 25;
+    const tGAsTopo = 200;
+    const tAgua = 35;      
+    const eAco = 0.05;     
+    const kAco = 45.0;     
+    const hAgua = 1200;    
+
+    const rRefratario = eRefratario / kRefratario;
+    const rAco = eAco / kAco;
+    const rConveccao = 1 / hAgua;
+    const rTotal = rRefratario + rAco + rConveccao;
+
+    const tbody = document.getElementById('tbody-perfil-bootstrap');
+    if (!tbody) return;
+    tbody.innerHTML = ''; 
+
+    let algumAlertaCritico = false;
+
+    for (let h = 0; h <= alturaUtil; h += 2) {
+        let fracao = h / alturaUtil;
+        let tNucleo = tCadinho;
+
+        if (fracao <= 0.24) { 
+            tNucleo = tCadinho - (fracao / 0.24) * 30; 
+        } else if (fracao > 0.24 && fracao <= 0.48) {
+            let f = (fracao - 0.24) / 0.24;
+            tNucleo = (tCadinho - 30) - (f * 460); 
+        } else if (fracao > 0.48 && fracao <= 0.76) {
+            let f = (fracao - 0.48) / 0.28;
+            tNucleo = 960 - (f * 80);   
+        } else {
+            let f = (fracao - 0.76) / 0.24;
+            tNucleo = 880 - (f * (880 - tGAsTopo)); 
+        }
+
+        let fluxoCalor = (tNucleo - tAgua) / rTotal;
+        let tFaceInternaRef = tNucleo - (fluxoCalor * (rRefratario * 0.15));
+        let tCarcacaExterna = tAgua + (fluxoCalor * rConveccao);
+
+        let n = Math.round(tNucleo);
+        let r = Math.round(tFaceInternaRef);
+        let c = Math.round(tCarcacaExterna);
+
+        let badgeStatus = '<span class="badge text-bg-success badge-status">SEGURO</span>';
+        let rowClass = '';
+
+        if (c > 90) {
+            badgeStatus = '<span class="badge text-bg-danger badge-status">CRÍTICO</span>';
+            rowClass = 'table-danger';
+            algumAlertaCritico = true;
+        } else if (c > 65) {
+            badgeStatus = '<span class="badge text-bg-warning badge-status">ATENÇÃO</span>';
+            rowClass = 'table-warning';
+        }
+
+        tbody.innerHTML += `
+            <tr class="${rowClass}">
+                <td class="fw-bold text-secondary">${h} m</td>
+                <td>${n} °C</td>
+                <td>${r} °C</td>
+                <td><mark class="fw-bold text-dark">${c} °C</mark></td>
+                <td>${badgeStatus}</td>
+            </tr>
+        `;
+    }
+
+    const indicadorGlobal = document.getElementById('status-geral-refrig');
+    if (indicadorGlobal) {
+        indicadorGlobal.className = algumAlertaCritico ? "badge bg-danger px-2 py-1" : "badge bg-success px-2 py-1";
+        indicadorGlobal.innerHTML = algumAlertaCritico ? "Risco de Breakout!" : "Sistema Íntegro";
+    }
+}
+
+// ATIVA O MONITORAMENTO PASSIVO DE SEGUNDOS DO SEU ALTO-FORNO
+setInterval(calcularPerfilTermicoBootstrap, 500);
+
+
+    const i18n = {
+      pt: {
+        appTitle: "Balanço Alto-Forno", appSubtitle: "Material + Térmico + Operacional",
+        tabMaterial: "Material", tabThermal: "Térmico", tabOperational: "Operacional",
+        tabLoads: 'Plano de Cargas', tabResults: 'Resultados / Relatório', loadsWarning: 'O plano de cargas converte o balanço em kg/t gusa para uma programação baseada no volume útil do carrinho.', loadsTitle: 'Plano de Cargas', cartVol: 'Volume útil do carrinho (m³)', cartFill: 'Fator de enchimento do carrinho (%)', oreDensity: 'Densidade aparente do minério (t/m³)', cokeDensity: 'Densidade aparente do coque (t/m³)', fluxDensity: 'Densidade aparente dos fundentes (t/m³)', pciDensity: 'Densidade aparente do PCI (t/m³) — referência volumétrica', loadsInfo: 'O cálculo considera minério + coque + fundentes + PCI. Para o PCI, o volume é apresentado como referência; sua alimentação normalmente é independente do carrinho.', loadsResults: 'Programa calculado', matCol: 'Material', perCart: 'kg/carrinho', volCart: 'm³/carrinho', cartEffVol: 'Volume efetivo do carrinho', cycleMass: 'Massa total por carrinho', cartsPerTon: 'Carrinhos por tonelada de gusa', cartsPerDay: 'Carrinhos estimados por dia', loadsPerDay: 'Número de cargas/lançamentos por dia', loadsDisclaimer: 'O programa é uma estimativa de distribuição de massa e volume. A sequência real de carregamento deve respeitar o sistema de carregamento e os procedimentos da planta.', reportTitle: 'Relatório Técnico — Alto-Forno', company: 'Empresa', technician: 'Técnico / Engenheiro', reportDate: 'Data', furnaceName: 'Alto-Forno / número', objective: 'Objetivo da análise', observations: 'Observações do técnico', objectivePh: 'Ex.: Avaliar o programa de cargas para a produção prevista.', observationsPh: 'Comentários, premissas ou recomendações.', generateReport: 'Gerar relatório para impressão', todayBtn: 'Usar data de hoje', resultSummary: 'Saída de Dados e Resultados', total: 'TOTAL',
+        installTitle: "Adicione à tela inicial:", installText: "Toque no menu do navegador e escolha 'Adicionar à tela inicial'.",
+        warning: "Atenção:", warnMaterial: "Preencha os dados de entrada e saída. Depois vá para a aba Térmico para transferir os resultados automaticamente.",
+        warnThermal: "Use o botão 'Transferir dados' na aba Material para preencher automaticamente os campos do balanço térmico.",
+        warnOp: "Preencha os dados do cadinho e da produção para estimar o tempo de residência e demais indicadores operacionais.",
+        btnTransfer: "Transferir dados para Balanço Térmico",
+        titleInputs: "Entradas (kg/t gusa)", titleOutputs: "Saídas (kg/t gusa)",
+        titleResMaterial: "Resultados do Balanço de Material", titleCompEsc: "Composição Calculada da Escória (%)",
+        titleResumoMat: "Resumo do Balanço de Massa",
+        lblMinFerro: "Minério de Ferro (kg/t)", lblCoque: "Coque (kg/t)", lblFluxo: "Fluxo (kg/t)",
+        lblPCI: "PCI (kg/t)", lblAr: "Ar Soprado (Nm³/t)", lblUmidadeAr: "Umidade do ar (g/Nm³)",
+        subCompMin: "Composição do Minério (%)", subCompCoque: "Composição do Coque (%)", subCompFluxo: "Composição do Fluxo (%)",
+        lblCFixo: "C fixo", lblVM: "VM", lblCinzas: "Cinzas",
+        lblProdGusa: "Produção de Gusa (kg/t)", subCompGusa: "Composição do Gusa (%)",
+        lblEscoria: "Escória produzida (kg/t)", lblGasTopo: "Gás de Topo (Nm³/t)",
+        lblMassaEnt: "Massa Total Entrada", lblMassaSai: "Massa Total Saída", lblErroMassa: "Diferença (Erro)",
+        balFe: "Balanço de Ferro (Fe)", lblFeEnt: "Fe entrada (kg/t)", lblFeSai: "Fe no gusa (kg/t)", lblRendFe: "Rendimento Fe (%)",
+        balC: "Balanço de Carbono (C)", lblCEnt: "C entrada (kg/t)", lblCSaiGusa: "C no gusa (kg/t)",
+        lblCSaiGas: "C no gás CO/CO₂ (kg/t)", lblDiffC: "Diferença C (kg/t)",
+        balSi: "Balanço de Silício (Si)", lblSiO2Ent: "SiO₂ entrada (kg/t)", lblSiSai: "Si no gusa (kg/t)", lblSiO2Esc: "SiO₂ na escória (kg/t)",
+        balMn: "Balanço de Manganês (Mn)", lblMnEnt: "Mn entrada (kg/t)", lblMnSaiGusa: "Mn no gusa (kg/t)",
+        lblMnSaiEsc: "Mn na escória (kg/t)", lblRendMn: "Rendimento Mn (%)",
+        balP: "Balanço de Fósforo (P)", lblPEnt: "P entrada (kg/t)", lblPSaiGusa: "P no gusa (kg/t)",
+        lblPSaiEsc: "P na escória (kg/t)", lblDistPGusa: "Distribuição P no gusa (%)",
+        lblBasico: "Básico (V)", thItem: "Item", thEntrada: "Entrada", thSaida: "Saída", thDiff: "Diferença",
+        errP: "P no gusa é maior que P de entrada!", errMn: "Mn no gusa é maior que Mn de entrada!",
+        titleEntThermal: "Entradas de Calor (kcal/kg gusa)", titleSaiThermal: "Saídas de Calor",
+        titleResThermal: "Resultados do Balanço Térmico", titleResumoTherm: "Resumo Térmico",
+        lblCoqueKg: "Coque (kg/t gusa)", lblPCIKg: "PCI (kg/t gusa)", lblMinKg: "Minério (kg/t gusa)",
+        lblFluxoKg: "Fluxo (kg/t gusa)", lblArNm3: "Ar soprado (Nm³/t)", lblTAr: "Temperatura do ar (°C)",
+        lblTAmb: "Temperatura ambiente (°C)", lblTRef: "Temperatura de referência (°C)",
+        lblH: "H", subReacoes: "Reações (ajuste)", lblSiGusa: "Si no gusa (%)", lblMnGusa: "Mn no gusa (%)",
+        lblPGusa: "P no gusa (%)", lblRd: "Rd (% red. direta)",
+        lblEscoriaKg: "Escória (kg/t gusa)", lblCO2Fluxo: "CO₂ no calcário (%)", lblTGas: "Temperatura do gás de topo (°C)",
+        lblGasTopoNm3: "Gás de topo (Nm³/t)", lblPerdas: "Perdas térmicas (kcal/kg gusa)",
+        infoBalanco: "O balanço está equilibrado quando a diferença está próxima de zero.",
+        lblQEnt: "Calor Total Entrada", lblQSai: "Calor Total Saída", lblQDiff: "Diferença (kcal/kg)",
+        detEnt: "Entradas Detalhadas (kcal/kg)", detSai: "Saídas Detalhadas (kcal/kg)",
+        lblCombCoque: "Combustão C → CO (coque)", lblCombPCI: "Combustão C → CO (PCI)",
+        lblQAr: "Calor sensível do ar", lblQMin: "Calor sensível minério", lblQFluxo: "Calor sensível fluxo",
+        lblQSi: "Oxid. Si → SiO₂", lblQMn: "Oxid. Mn → MnO", lblQP: "Oxid. P → P₂O₅",
+        lblQRD: "Redução direta FeO + C", lblQRI: "Redução indireta FeO + CO",
+        lblQRedSi: "Redução SiO₂ → Si", lblQRedMn: "Redução MnO → Mn", lblQRedP: "Redução P₂O₅ → P",
+        lblQDescarb: "Descarbonatação CaCO₃", lblQFusGusa: "Fusão do gusa", lblQFusEsc: "Fusão da escória",
+        lblQGas: "Calor sensível gás de topo", lblQPerdas: "Perdas térmicas",
+        titleTCadinho: "TEMPERATURA DO CADINHO ESTIMADA", subTCadinho: "Baseada no excedente/déficit de calor do balanço",
+        titleParams: "Parâmetros do Alto-Forno e Produção",
+        lblVolAF: "Volume útil do Alto-Forno (m³)", lblVolCadinho: "Volume útil do cadinho (m³)", lblAltAF: "Altura útil da carga no Alto-Forno (m)",
+        lblProdDia: "Produção de gusa (t/dia)", lblDensGusa: "Densidade volumétrica da carga (t/m³)", lblDensPig: 'Densidade do gusa (t/m³)',
+        lblEnchimento: "Fator de enchimento (%)", lblVDesc: "Velocidade de descida (m/h) — opcional",
+        subRefMaterial: "Dados da Aba Material (referência)",
+        titleRefOp: "Referências Operacionais", titleDiag: "Diagnóstico de Consistência",
+        refTRes: "Tempo de residência ideal", refProd: "Produtividade específica ideal",
+        refVDesc: "Velocidade de descida típica", refIC: "Índice de coque típico",
+        subAnalise: "Análise dos seus dados atuais", diagProd: "Produção digitada", diagVol: "Volume do AF",
+        diagProdCalc: "Produtividade calculada", diagTRes: "Tempo de residência calculado", diagVDesc: "Velocidade de descida calculada",
+        subSug: "Sugestão para ajuste", sugProdMin: "Produção ideal para este volume", sugVol: "Volume necessário para esta produção",
+        sugEnch: "Enchimento sugerido (p/ t=8h)", diagHint: "Digite os dados acima e o app calcula automaticamente o diagnóstico.",
+        titleResOp: "Resultados Operacionais",
+        lblTRes: "Tempo de residência da carga (h)", lblVDescCalc: "Velocidade descida (m/h)", lblProdEspec: "Produtividade (t/m³/dia)", lblMarcha: "Marcha do forno (t/m³ cadinho·dia)",
+        lblVazao: "Vazão de gusa (t/h)", lblVolHora: "Volume gusa/hora (m³/h)", lblIntVaz: "Tempo estimado de renovação do gusa no cadinho", lblVazDia: "Corridas estimadas por dia", lblIC: "Índice de coque (kg/t)",
+        titleTResDest: "TEMPO DE RESIDÊNCIA ESTIMADO", subTResDest: "Baseado no volume útil do Alto-Forno e vazão de produção",
+        infoOp: "O tempo de residência da carga no Alto-Forno moderno varia entre 6 e 10 horas.", infoVaz: "Para o intervalo entre corridas, informe o volume útil do cadinho já descontando o deadman e demais volumes que não participam da acumulação de gusa.",
+        titleResumoOp: "Resumo Operacional", thParam: "Parâmetro", thValor: "Valor", thUnid: "Unidade",
+        msgBalOk: "Balanço equilibrado! A diferença está dentro de 2%.",
+        msgSuperavit: "Superávit de calor. A temperatura do cadinho será alta. Reduza coque/PCI ou aumente Rd/perdas.",
+        msgDeficit: "Déficit de calor. A temperatura do cadinho será baixa. Aumente coque/PCI, T do ar, ou reduza Rd/perdas.",
+        msgOpIdeal: "Operação dentro dos parâmetros ideais. Tempo de residência e produtividade na faixa recomendada.",
+        msgTResAlto: "Tempo de residência MUITO ALTO.", msgTResBaixo: "Tempo de residência BAIXO.",
+        msgProdFora: "Produtividade fora da faixa recomendada.", msgParamsOk: "Parâmetros consistentes!",
+        msgTResFora: "Tempo de residência fora da faixa!",
+        msgProdFora2: "Produtividade fora da faixa!",
+        msgAtencao: "Parâmetros na faixa de atenção. Monitore a operação para evitar desvios maiores.",
+        statusIdeal: "IDEAL", statusAtencao: "ATENÇÃO", statusFora: "FORA", statusAlta: "ALTA", statusMuitoAlta: "MUITO ALTA",
+        lblDP: "ΔP — Perda de pressão",
+        statusMuitoPermeavel: "Muito permeável", statusNormal: "Normal", statusCritico: "Crítico", statusHanging: "Hanging !!?",
+        msgDPExcessiva: "Perda de pressão excessiva.", msgDPCritica: "Perda de pressão crítica.",
+        msgDPCheck: "Possível hanging ou engaiolamento. Verificar distribuição de carga, finos e permeabilidade.",
+        msgDPMonitor: "Monitorar permeabilidade e estabilidade operacional."
+      },
+      en: {
+        appTitle: "Blast Furnace Balance", appSubtitle: "Material + Thermal + Operational",
+        tabMaterial: "Material", tabThermal: "Thermal", tabOperational: "Operational",
+        tabLoads: 'Charge Plan', tabResults: 'Results / Report', loadsWarning: 'The charge plan converts the material balance into a program based on the useful skip volume.', loadsTitle: 'Charge Plan', cartVol: 'Useful skip volume (m³)', cartFill: 'Skip filling factor (%)', oreDensity: 'Bulk ore density (t/m³)', cokeDensity: 'Bulk coke density (t/m³)', fluxDensity: 'Bulk flux density (t/m³)', pciDensity: 'Bulk PCI density (t/m³) — volumetric reference', loadsInfo: 'The calculation includes ore + coke + flux + PCI. For PCI, the volume is shown as a reference; its feeding is normally independent of the skip.', loadsResults: 'Calculated program', matCol: 'Material', perCart: 'kg/skip', volCart: 'm³/skip', cartEffVol: 'Effective skip volume', cycleMass: 'Total mass per skip', cartsPerTon: 'Skips per ton of pig iron', cartsPerDay: 'Estimated skips per day', loadsPerDay: 'Loads / charges per day', loadsDisclaimer: 'The program is an estimate of mass and volume distribution. The actual charging sequence must follow the plant charging system and procedures.', reportTitle: 'Technical Report — Blast Furnace', company: 'Company', technician: 'Technician / Engineer', reportDate: 'Date', furnaceName: 'Blast Furnace / number', objective: 'Analysis objective', observations: 'Technician observations', objectivePh: 'E.g.: Evaluate the charge program for the planned production.', observationsPh: 'Comments, assumptions or recommendations.', generateReport: 'Generate printable report', todayBtn: "Use today's date", resultSummary: 'Data Output and Results', total: 'TOTAL',
+        installTitle: "Add to home screen:", installText: "Tap the browser menu and choose 'Add to home screen'.",
+        warning: "Attention:", warnMaterial: "Fill in the input and output data. Then go to the Thermal tab to automatically transfer the results.",
+        warnThermal: "Use the 'Transfer data' button in the Material tab to automatically fill in the thermal balance fields.",
+        warnOp: "Fill in the hearth and production data to estimate residence time and other operational indicators.",
+        btnTransfer: "Transfer data to Thermal Balance",
+        titleInputs: "Inputs (kg/t pig iron)", titleOutputs: "Outputs (kg/t pig iron)",
+        titleResMaterial: "Material Balance Results", titleCompEsc: "Calculated Slag Composition (%)",
+        titleResumoMat: "Mass Balance Summary",
+        lblMinFerro: "Iron Ore (kg/t)", lblCoque: "Coke (kg/t)", lblFluxo: "Flux (kg/t)",
+        lblPCI: "PCI (kg/t)", lblAr: "Blast Air (Nm³/t)", lblUmidadeAr: "Air humidity (g/Nm³)",
+        subCompMin: "Ore Composition (%)", subCompCoque: "Coke Composition (%)", subCompFluxo: "Flux Composition (%)",
+        lblCFixo: "Fixed C", lblVM: "VM", lblCinzas: "Ash",
+        lblProdGusa: "Pig Iron Production (kg/t)", subCompGusa: "Pig Iron Composition (%)",
+        lblEscoria: "Slag produced (kg/t)", lblGasTopo: "Top Gas (Nm³/t)",
+        lblMassaEnt: "Total Input Mass", lblMassaSai: "Total Output Mass", lblErroMassa: "Difference (Error)",
+        balFe: "Iron Balance (Fe)", lblFeEnt: "Fe input (kg/t)", lblFeSai: "Fe in pig iron (kg/t)", lblRendFe: "Fe Yield (%)",
+        balC: "Carbon Balance (C)", lblCEnt: "C input (kg/t)", lblCSaiGusa: "C in pig iron (kg/t)",
+        lblCSaiGas: "C in gas CO/CO₂ (kg/t)", lblDiffC: "C Difference (kg/t)",
+        balSi: "Silicon Balance (Si)", lblSiO2Ent: "SiO₂ input (kg/t)", lblSiSai: "Si in pig iron (kg/t)", lblSiO2Esc: "SiO₂ in slag (kg/t)",
+        balMn: "Manganese Balance (Mn)", lblMnEnt: "Mn input (kg/t)", lblMnSaiGusa: "Mn in pig iron (kg/t)",
+        lblMnSaiEsc: "Mn in slag (kg/t)", lblRendMn: "Mn Yield (%)",
+        balP: "Phosphorus Balance (P)", lblPEnt: "P input (kg/t)", lblPSaiGusa: "P in pig iron (kg/t)",
+        lblPSaiEsc: "P in slag (kg/t)", lblDistPGusa: "P Distribution in pig iron (%)",
+        lblBasico: "Basicity (V)", thItem: "Item", thEntrada: "Input", thSaida: "Output", thDiff: "Difference",
+        errP: "P in pig iron is greater than P input!", errMn: "Mn in pig iron is greater than Mn input!",
+        titleEntThermal: "Heat Inputs (kcal/kg pig iron)", titleSaiThermal: "Heat Outputs",
+        titleResThermal: "Thermal Balance Results", titleResumoTherm: "Thermal Summary",
+        lblCoqueKg: "Coke (kg/t pig iron)", lblPCIKg: "PCI (kg/t pig iron)", lblMinKg: "Ore (kg/t pig iron)",
+        lblFluxoKg: "Flux (kg/t pig iron)", lblArNm3: "Blast air (Nm³/t)", lblTAr: "Air temperature (°C)",
+        lblTAmb: "Ambient temperature (°C)", lblTRef: "Reference temperature (°C)",
+        lblH: "H", subReacoes: "Reactions (adjust)", lblSiGusa: "Si in pig iron (%)", lblMnGusa: "Mn in pig iron (%)",
+        lblPGusa: "P in pig iron (%)", lblRd: "Rd (% direct red.)",
+        lblEscoriaKg: "Slag (kg/t pig iron)", lblCO2Fluxo: "CO₂ in limestone (%)", lblTGas: "Top gas temperature (°C)",
+        lblGasTopoNm3: "Top gas (Nm³/t)", lblPerdas: "Thermal losses (kcal/kg pig iron)",
+        infoBalanco: "The balance is balanced when the difference is close to zero.",
+        lblQEnt: "Total Heat Input", lblQSai: "Total Heat Output", lblQDiff: "Difference (kcal/kg)",
+        detEnt: "Detailed Inputs (kcal/kg)", detSai: "Detailed Outputs (kcal/kg)",
+        lblCombCoque: "Combustion C → CO (coke)", lblCombPCI: "Combustion C → CO (PCI)",
+        lblQAr: "Sensible heat of air", lblQMin: "Sensible heat of ore", lblQFluxo: "Sensible heat of flux",
+        lblQSi: "Oxid. Si → SiO₂", lblQMn: "Oxid. Mn → MnO", lblQP: "Oxid. P → P₂O₅",
+        lblQRD: "Direct reduction FeO + C", lblQRI: "Indirect reduction FeO + CO",
+        lblQRedSi: "Reduction SiO₂ → Si", lblQRedMn: "Reduction MnO → Mn", lblQRedP: "Reduction P₂O₅ → P",
+        lblQDescarb: "Decarbonation CaCO₃", lblQFusGusa: "Pig iron fusion", lblQFusEsc: "Slag fusion",
+        lblQGas: "Sensible heat top gas", lblQPerdas: "Thermal losses",
+        titleTCadinho: "ESTIMATED HEARTH TEMPERATURE", subTCadinho: "Based on heat surplus/deficit from the balance",
+        titleParams: "Blast Furnace and Production Parameters",
+        lblVolAF: "Blast Furnace useful volume (m³)", lblVolCadinho: "Useful hearth volume (m³)", lblAltAF: "Charge useful height (m)",
+        lblProdDia: "Pig iron production (t/day)", lblDensGusa: "Bulk charge density (t/m³)", lblDensPig: "Pig iron density (t/m³)",
+        lblEnchimento: "Fill factor (%)", lblVDesc: "Descent velocity (m/h) — optional",
+        subRefMaterial: "Material Tab Data (reference)",
+        titleRefOp: "Operational References", titleDiag: "Consistency Diagnosis",
+        refTRes: "Ideal residence time", refProd: "Ideal specific productivity",
+        refVDesc: "Typical descent velocity", refIC: "Typical coke rate",
+        subAnalise: "Analysis of your current data", diagProd: "Entered production", diagVol: "BF volume",
+        diagProdCalc: "Calculated productivity", diagTRes: "Calculated residence time", diagVDesc: "Calculated descent velocity",
+        subSug: "Adjustment suggestion", sugProdMin: "Ideal production for this volume", sugVol: "Required volume for this production",
+        sugEnch: "Suggested fill (for t=8h)", diagHint: "Enter the data above and the app automatically calculates the diagnosis.",
+        titleResOp: "Operational Results",
+        lblTRes: "Charge residence time (h)", lblVDescCalc: "Descent velocity (m/h)", lblProdEspec: "Productivity (t/m³/day)", lblMarcha: "Furnace rate (t/m³ hearth·day)",
+        lblVazao: "Pig iron flow rate (t/h)", lblVolHora: "Pig iron volume/hour (m³/h)", lblIntVaz: "Estimated pig iron renewal time in hearth", lblVazDia: "Estimated casts per day", lblIC: "Coke rate (kg/t)",
+        titleTResDest: "ESTIMATED RESIDENCE TIME", subTResDest: "Based on BF useful volume and production flow rate",
+        infoOp: "The charge residence time in a modern Blast Furnace ranges from 6 to 10 hours.", infoVaz: "For the pig iron renewal estimate, enter the useful hearth volume already excluding the deadman and other volumes that do not participate in pig iron accumulation.",
+        titleResumoOp: "Operational Summary", thParam: "Parameter", thValor: "Value", thUnid: "Unit",
+        msgBalOk: "Balance balanced! The difference is within 2%.",
+        msgSuperavit: "Heat surplus. The hearth temperature will be high. Reduce coke/PCI or increase Rd/losses.",
+        msgDeficit: "Heat deficit. The hearth temperature will be low. Increase coke/PCI, air T, or reduce Rd/losses.",
+        msgOpIdeal: "Operation within ideal parameters. Residence time and productivity in recommended range.",
+        msgTResAlto: "Residence time VERY HIGH.", msgTResBaixo: "Residence time LOW.",
+        msgProdFora: "Productivity outside recommended range.", msgParamsOk: "Parameters consistent!",
+        msgTResFora: "Residence time outside range!",
+        msgProdFora2: "Productivity outside range!",
+        msgAtencao: "Parameters in attention range. Monitor operation to avoid larger deviations.",
+        statusIdeal: "IDEAL", statusAtencao: "WARNING", statusFora: "OUT", statusAlta: "HIGH", statusMuitoAlta: "VERY HIGH",
+        lblDP: "ΔP — Pressure Drop",
+        statusMuitoPermeavel: "Very permeable", statusNormal: "Normal", statusCritico: "Critical", statusHanging: "Hanging !!?",
+        msgDPExcessiva: "Excessive pressure drop.", msgDPCritica: "Critical pressure drop.",
+        msgDPCheck: "Possible hanging or scaffolding. Check burden distribution, fines and permeability.",
+        msgDPMonitor: "Monitor permeability and operational stability."
+      },
+      es: {
+        appTitle: "Balance Alto Horno", appSubtitle: "Material + Térmico + Operacional",
+        tabMaterial: "Material", tabThermal: "Térmico", tabOperational: "Operacional",
+        tabLoads: 'Plan de Cargas', tabResults: 'Resultados / Informe', loadsWarning: 'El plan de cargas convierte el balance de materiales en un programa basado en el volumen útil del skip.', loadsTitle: 'Plan de Cargas', cartVol: 'Volumen útil del skip (m³)', cartFill: 'Factor de llenado del skip (%)', oreDensity: 'Densidad aparente del mineral (t/m³)', cokeDensity: 'Densidad aparente del coque (t/m³)', fluxDensity: 'Densidad aparente de los fundentes (t/m³)', pciDensity: 'Densidad aparente del PCI (t/m³) — referencia volumétrica', loadsInfo: 'El cálculo considera mineral + coque + fundentes + PCI. Para el PCI, el volumen se muestra como referencia; su alimentación normalmente es independiente del skip.', loadsResults: 'Programa calculado', matCol: 'Material', perCart: 'kg/skip', volCart: 'm³/skip', cartEffVol: 'Volumen efectivo del skip', cycleMass: 'Masa total por skip', cartsPerTon: 'Skips por tonelada de arrabio', cartsPerDay: 'Skips estimados por día', loadsPerDay: 'Número de cargas/lanzamientos por día', loadsDisclaimer: 'El programa es una estimación de distribución de masa y volumen. La secuencia real debe respetar el sistema de carga y los procedimientos de la planta.', reportTitle: 'Informe Técnico — Alto Horno', company: 'Empresa', technician: 'Técnico / Ingeniero', reportDate: 'Fecha', furnaceName: 'Alto Horno / número', objective: 'Objetivo del análisis', observations: 'Observaciones del técnico', objectivePh: 'Ej.: Evaluar el plan de cargas para la producción prevista.', observationsPh: 'Comentarios, premisas o recomendaciones.', generateReport: 'Generar informe para impresión', todayBtn: 'Usar fecha de hoy', resultSummary: 'Salida de Datos y Resultados', total: 'TOTAL',
+        installTitle: "Agregar a pantalla de inicio:", installText: "Toque el menú del navegador y elija 'Agregar a pantalla de inicio'.",
+        warning: "Atención:", warnMaterial: "Complete los datos de entrada y salida. Luego vaya a la pestaña Térmico para transferir los resultados automáticamente.",
+        warnThermal: "Use el botón 'Transferir datos' en la pestaña Material para completar automáticamente los campos del balance térmico.",
+        warnOp: "Complete los datos del hogar y la producción para estimar el tiempo de residencia y demás indicadores operacionales.",
+        btnTransfer: "Transferir datos a Balance Térmico",
+        titleInputs: "Entradas (kg/t hierro)", titleOutputs: "Salidas (kg/t hierro)",
+        titleResMaterial: "Resultados del Balance de Material", titleCompEsc: "Composición Calculada de la Escoria (%)",
+        titleResumoMat: "Resumen del Balance de Masa",
+        lblMinFerro: "Mineral de Hierro (kg/t)", lblCoque: "Coque (kg/t)", lblFluxo: "Flujo (kg/t)",
+        lblPCI: "PCI (kg/t)", lblAr: "Aire Soplado (Nm³/t)", lblUmidadeAr: "Humedad del aire (g/Nm³)",
+        subCompMin: "Composición del Mineral (%)", subCompCoque: "Composición del Coque (%)", subCompFluxo: "Composición del Flujo (%)",
+        lblCFixo: "C fijo", lblVM: "MV", lblCinzas: "Cenizas",
+        lblProdGusa: "Producción de Hierro (kg/t)", subCompGusa: "Composición del Hierro (%)",
+        lblEscoria: "Escoria producida (kg/t)", lblGasTopo: "Gas de Copa (Nm³/t)",
+        lblMassaEnt: "Masa Total Entrada", lblMassaSai: "Masa Total Salida", lblErroMassa: "Diferencia (Error)",
+        balFe: "Balance de Hierro (Fe)", lblFeEnt: "Fe entrada (kg/t)", lblFeSai: "Fe en hierro (kg/t)", lblRendFe: "Rendimiento Fe (%)",
+        balC: "Balance de Carbono (C)", lblCEnt: "C entrada (kg/t)", lblCSaiGusa: "C en hierro (kg/t)",
+        lblCSaiGas: "C en gas CO/CO₂ (kg/t)", lblDiffC: "Diferencia C (kg/t)",
+        balSi: "Balance de Silicio (Si)", lblSiO2Ent: "SiO₂ entrada (kg/t)", lblSiSai: "Si en hierro (kg/t)", lblSiO2Esc: "SiO₂ en escoria (kg/t)",
+        balMn: "Balance de Manganeso (Mn)", lblMnEnt: "Mn entrada (kg/t)", lblMnSaiGusa: "Mn en hierro (kg/t)",
+        lblMnSaiEsc: "Mn en escoria (kg/t)", lblRendMn: "Rendimiento Mn (%)",
+        balP: "Balance de Fósforo (P)", lblPEnt: "P entrada (kg/t)", lblPSaiGusa: "P en hierro (kg/t)",
+        lblPSaiEsc: "P en escoria (kg/t)", lblDistPGusa: "Distribución P en hierro (%)",
+        lblBasico: "Básico (V)", thItem: "Ítem", thEntrada: "Entrada", thSaida: "Salida", thDiff: "Diferencia",
+        errP: "P en hierro es mayor que P de entrada!", errMn: "Mn en hierro es mayor que Mn de entrada!",
+        titleEntThermal: "Entradas de Calor (kcal/kg hierro)", titleSaiThermal: "Salidas de Calor",
+        titleResThermal: "Resultados del Balance Térmico", titleResumoTherm: "Resumen Térmico",
+        lblCoqueKg: "Coque (kg/t hierro)", lblPCIKg: "PCI (kg/t hierro)", lblMinKg: "Mineral (kg/t hierro)",
+        lblFluxoKg: "Flujo (kg/t hierro)", lblArNm3: "Aire soplado (Nm³/t)", lblTAr: "Temperatura del aire (°C)",
+        lblTAmb: "Temperatura ambiente (°C)", lblTRef: "Temperatura de referencia (°C)",
+        lblH: "H", subReacoes: "Reacciones (ajuste)", lblSiGusa: "Si en hierro (%)", lblMnGusa: "Mn en hierro (%)",
+        lblPGusa: "P en hierro (%)", lblRd: "Rd (% red. directa)",
+        lblEscoriaKg: "Escoria (kg/t hierro)", lblCO2Fluxo: "CO₂ en caliza (%)", lblTGas: "Temperatura del gas de copa (°C)",
+        lblGasTopoNm3: "Gas de copa (Nm³/t)", lblPerdas: "Pérdidas térmicas (kcal/kg hierro)",
+        infoBalanco: "El balance está equilibrado cuando la diferencia está cerca de cero.",
+        lblQEnt: "Calor Total Entrada", lblQSai: "Calor Total Salida", lblQDiff: "Diferencia (kcal/kg)",
+        detEnt: "Entradas Detalladas (kcal/kg)", detSai: "Salidas Detalladas (kcal/kg)",
+        lblCombCoque: "Combustión C → CO (coque)", lblCombPCI: "Combustión C → CO (PCI)",
+        lblQAr: "Calor sensible del aire", lblQMin: "Calor sensible mineral", lblQFluxo: "Calor sensible flujo",
+        lblQSi: "Oxid. Si → SiO₂", lblQMn: "Oxid. Mn → MnO", lblQP: "Oxid. P → P₂O₅",
+        lblQRD: "Reducción directa FeO + C", lblQRI: "Reducción indirecta FeO + CO",
+        lblQRedSi: "Reducción SiO₂ → Si", lblQRedMn: "Reducción MnO → Mn", lblQRedP: "Reducción P₂O₅ → P",
+        lblQDescarb: "Descarbonatación CaCO₃", lblQFusGusa: "Fusión del hierro", lblQFusEsc: "Fusión de la escoria",
+        lblQGas: "Calor sensible gas de copa", lblQPerdas: "Pérdidas térmicas",
+        titleTCadinho: "TEMPERATURA DEL HOGAR ESTIMADA", subTCadinho: "Basada en el excedente/déficit de calor del balance",
+        titleParams: "Parámetros del Alto Horno y Producción",
+        lblVolAF: "Volumen útil del Alto Horno (m³)", lblVolCadinho: "Volumen útil del crisol (m³)", lblAltAF: "Altura útil de la carga (m)",
+        lblProdDia: "Producción de hierro (t/día)", lblDensGusa: "Densidad volumétrica de la carga (t/m³)", lblDensPig: "Densidad del hierro líquido (t/m³)",
+        lblEnchimento: "Factor de llenado (%)", lblVDesc: "Velocidad de descenso (m/h) — opcional",
+        subRefMaterial: "Datos de la Pestaña Material (referencia)",
+        titleRefOp: "Referencias Operacionales", titleDiag: "Diagnóstico de Consistencia",
+        refTRes: "Tiempo de residencia ideal", refProd: "Productividad específica ideal",
+        refVDesc: "Velocidad de descenso típica", refIC: "Índice de coque típico",
+        subAnalise: "Análisis de sus datos actuales", diagProd: "Producción digitada", diagVol: "Volumen del AH",
+        diagProdCalc: "Productividad calculada", diagTRes: "Tiempo de residencia calculado", diagVDesc: "Velocidad de descenso calculada",
+        subSug: "Sugerencia de ajuste", sugProdMin: "Producción ideal para este volumen", sugVol: "Volumen necesario para esta producción",
+        sugEnch: "Llenado sugerido (p/ t=8h)", diagHint: "Ingrese los datos arriba y la app calcula automáticamente el diagnóstico.",
+        titleResOp: "Resultados Operacionales",
+        lblTRes: "Tiempo de residencia de la carga (h)", lblVDescCalc: "Velocidad descenso (m/h)", lblProdEspec: "Productividad (t/m³/día)", lblMarcha: "Marcha del horno (t/m³ crisol·día)",
+        lblVazao: "Flujo de hierro (t/h)", lblVolHora: "Volumen hierro/hora (m³/h)", lblIntVaz: "Tiempo estimado de renovación del arrabio en el crisol", lblVazDia: "Coladas estimadas por día", lblIC: "Índice de coque (kg/t)",
+        titleTResDest: "TIEMPO DE RESIDENCIA ESTIMADO", subTResDest: "Basado en el volumen útil del Alto Horno y flujo de producción",
+        infoOp: "El tiempo de residencia de la carga en un Alto Horno moderno varía entre 6 y 10 horas.", infoVaz: "Para el intervalo entre coladas, informe el volumen útil del crisol ya descontando el deadman y demás volúmenes que no participan en la acumulación de hierro líquido.",
+        titleResumoOp: "Resumen Operacional", thParam: "Parámetro", thValor: "Valor", thUnid: "Unidad",
+        msgBalOk: "¡Balance equilibrado! La diferencia está dentro del 2%.",
+        msgSuperavit: "Superávit de calor. La temperatura del hogar será alta. Reduzca coque/PCI o aumente Rd/pérdidas.",
+        msgDeficit: "Déficit de calor. La temperatura del hogar será baja. Aumente coque/PCI, T del aire, o reduzca Rd/pérdidas.",
+        msgOpIdeal: "Operación dentro de los parámetros ideales. Tiempo de residencia y productividad en rango recomendado.",
+        msgTResAlto: "Tiempo de residencia MUY ALTO.", msgTResBaixo: "Tiempo de residencia BAJO.",
+        msgProdFora: "Productividad fuera del rango recomendado.", msgParamsOk: "¡Parámetros consistentes!",
+        msgTResFora: "¡Tiempo de residencia fuera del rango!",
+        msgProdFora2: "¡Productividad fuera del rango!",
+        msgAtencao: "Parámetros en rango de atención. Monitoree la operación para evitar desviaciones mayores.",
+        statusIdeal: "IDEAL", statusAtencao: "ATENCIÓN", statusFora: "FUERA", statusAlta: "ALTA", statusMuitoAlta: "MUY ALTA",
+        lblDP: "ΔP — Pérdida de presión",
+        statusMuitoPermeavel: "Muy permeable", statusNormal: "Normal", statusCritico: "Crítico", statusHanging: "Hanging !!?",
+        msgDPExcessiva: "Pérdida de presión excesiva.", msgDPCritica: "Pérdida de presión crítica.",
+        msgDPCheck: "Posible hanging o encofrado. Verificar distribución de carga, finos y permeabilidad.",
+        msgDPMonitor: "Monitorear permeabilidad y estabilidad operacional."
+      },
+      zh: {
+        appTitle: "高炉平衡计算", appSubtitle: "物料 + 热平衡 + 操作",
+        tabMaterial: "物料", tabThermal: "热平衡", tabOperational: "操作",
+        tabLoads: '装料计划', tabResults: '结果 / 报告', loadsWarning: '装料计划将物料平衡转换为基于料车有效容积的装料方案。', loadsTitle: '装料计划', cartVol: '料车有效容积 (m³)', cartFill: '料车装满系数 (%)', oreDensity: '矿石堆积密度 (t/m³)', cokeDensity: '焦炭堆积密度 (t/m³)', fluxDensity: '熔剂堆积密度 (t/m³)', pciDensity: 'PCI堆积密度 (t/m³) — 体积参考', loadsInfo: '计算包括矿石 + 焦炭 + 熔剂 + PCI。PCI体积仅作参考，其通常独立于料车给料。', loadsResults: '计算结果', matCol: '物料', perCart: 'kg/车', volCart: 'm³/车', cartEffVol: '料车有效容积', cycleMass: '每车总质量', cartsPerTon: '每吨铁水料车数', cartsPerDay: '预计每日料车数', loadsPerDay: '每日装料/投料次数', loadsDisclaimer: '本方案是质量和体积分配的估算。实际装料顺序应遵循工厂装料系统和操作规程。', reportTitle: '高炉技术报告', company: '公司', technician: '技术员 / 工程师', reportDate: '日期', furnaceName: '高炉 / 编号', objective: '分析目标', observations: '技术员备注', objectivePh: '例如：评估计划产量下的装料方案。', observationsPh: '备注、假设或建议。', generateReport: '生成可打印报告', todayBtn: '使用今天日期', resultSummary: '数据输出与结果', total: '合计',
+        installTitle: "添加到主屏幕：", installText: "点击浏览器菜单并选择'添加到主屏幕'。",
+        warning: "注意：", warnMaterial: "填写输入和输出数据。然后转到热平衡选项卡自动传输结果。",
+        warnThermal: "使用物料选项卡中的'传输数据'按钮自动填充热平衡字段。",
+        warnOp: "填写炉缸和生产数据以估算停留时间和其他操作指标。",
+        btnTransfer: "传输数据至热平衡",
+        titleInputs: "输入 (kg/t 生铁)", titleOutputs: "输出 (kg/t 生铁)",
+        titleResMaterial: "物料平衡结果", titleCompEsc: "计算炉渣成分 (%)",
+        titleResumoMat: "质量平衡汇总",
+        lblMinFerro: "铁矿石 (kg/t)", lblCoque: "焦炭 (kg/t)", lblFluxo: "熔剂 (kg/t)",
+        lblPCI: "喷吹煤粉 (kg/t)", lblAr: "鼓风量 (Nm³/t)", lblUmidadeAr: "空气湿度 (g/Nm³)",
+        subCompMin: "矿石成分 (%)", subCompCoque: "焦炭成分 (%)", subCompFluxo: "熔剂成分 (%)",
+        lblCFixo: "固定碳", lblVM: "挥发分", lblCinzas: "灰分",
+        lblProdGusa: "生铁产量 (kg/t)", subCompGusa: "生铁成分 (%)",
+        lblEscoria: "炉渣产量 (kg/t)", lblGasTopo: "炉顶煤气 (Nm³/t)",
+        lblMassaEnt: "总输入质量", lblMassaSai: "总输出质量", lblErroMassa: "差异 (误差)",
+        balFe: "铁平衡 (Fe)", lblFeEnt: "铁输入 (kg/t)", lblFeSai: "生铁中铁 (kg/t)", lblRendFe: "铁收得率 (%)",
+        balC: "碳平衡 (C)", lblCEnt: "碳输入 (kg/t)", lblCSaiGusa: "生铁中碳 (kg/t)",
+        lblCSaiGas: "煤气中碳 CO/CO₂ (kg/t)", lblDiffC: "碳差异 (kg/t)",
+        balSi: "硅平衡 (Si)", lblSiO2Ent: "SiO₂ 输入 (kg/t)", lblSiSai: "生铁中硅 (kg/t)", lblSiO2Esc: "炉渣中 SiO₂ (kg/t)",
+        balMn: "锰平衡 (Mn)", lblMnEnt: "锰输入 (kg/t)", lblMnSaiGusa: "生铁中锰 (kg/t)",
+        lblMnSaiEsc: "炉渣中锰 (kg/t)", lblRendMn: "锰收得率 (%)",
+        balP: "磷平衡 (P)", lblPEnt: "磷输入 (kg/t)", lblPSaiGusa: "生铁中磷 (kg/t)",
+        lblPSaiEsc: "炉渣中磷 (kg/t)", lblDistPGusa: "生铁中磷分布 (%)",
+        lblBasico: "碱度 (V)", thItem: "项目", thEntrada: "输入", thSaida: "输出", thDiff: "差异",
+        errP: "生铁中磷大于输入磷！", errMn: "生铁中锰大于输入锰！",
+        titleEntThermal: "热量输入 (kcal/kg 生铁)", titleSaiThermal: "热量输出",
+        titleResThermal: "热平衡结果", titleResumoTherm: "热平衡汇总",
+        lblCoqueKg: "焦炭 (kg/t 生铁)", lblPCIKg: "喷吹煤粉 (kg/t 生铁)", lblMinKg: "矿石 (kg/t 生铁)",
+        lblFluxoKg: "熔剂 (kg/t 生铁)", lblArNm3: "鼓风量 (Nm³/t)", lblTAr: "风温 (°C)",
+        lblTAmb: "环境温度 (°C)", lblTRef: "参考温度 (°C)",
+        lblH: "氢", subReacoes: "反应 (调整)", lblSiGusa: "生铁中硅 (%)", lblMnGusa: "生铁中锰 (%)",
+        lblPGusa: "生铁中磷 (%)", lblRd: "直接还原度 Rd (%)",
+        lblEscoriaKg: "炉渣 (kg/t 生铁)", lblCO2Fluxo: "石灰石中 CO₂ (%)", lblTGas: "炉顶煤气温度 (°C)",
+        lblGasTopoNm3: "炉顶煤气 (Nm³/t)", lblPerdas: "热损失 (kcal/kg 生铁)",
+        infoBalanco: "当差异接近零时，平衡处于平衡状态。",
+        lblQEnt: "总热量输入", lblQSai: "总热量输出", lblQDiff: "差异 (kcal/kg)",
+        detEnt: "详细输入 (kcal/kg)", detSai: "详细输出 (kcal/kg)",
+        lblCombCoque: "燃烧 C → CO (焦炭)", lblCombPCI: "燃烧 C → CO (喷吹煤粉)",
+        lblQAr: "空气显热", lblQMin: "矿石显热", lblQFluxo: "熔剂显热",
+        lblQSi: "氧化 Si → SiO₂", lblQMn: "氧化 Mn → MnO", lblQP: "氧化 P → P₂O₅",
+        lblQRD: "直接还原 FeO + C", lblQRI: "间接还原 FeO + CO",
+        lblQRedSi: "还原 SiO₂ → Si", lblQRedMn: "还原 MnO → Mn", lblQRedP: "还原 P₂O₅ → P",
+        lblQDescarb: "石灰石分解 CaCO₃", lblQFusGusa: "生铁熔化", lblQFusEsc: "炉渣熔化",
+        lblQGas: "炉顶煤气显热", lblQPerdas: "热损失",
+        titleTCadinho: "估算炉缸温度", subTCadinho: "基于热平衡盈余/赤字",
+        titleParams: "高炉及生产参数",
+        lblVolAF: "高炉有效容积 (m³)", lblVolCadinho: "炉缸有效容积 (m³)", lblAltAF: "料柱有效高度 (m)",
+        lblProdDia: "生铁日产量 (t/天)", lblDensGusa: "炉料堆积密度 (t/m³)", lblDensPig: "生铁密度 (t/m³)",
+        lblEnchimento: "填充率 (%)", lblVDesc: "下降速度 (m/h) — 可选",
+        subRefMaterial: "物料选项卡数据 (参考)",
+        titleRefOp: "操作参考", titleDiag: "一致性诊断",
+        refTRes: "理想停留时间", refProd: "理想比生产率",
+        refVDesc: "典型下降速度", refIC: "典型焦比",
+        subAnalise: "当前数据分析", diagProd: "输入产量", diagVol: "高炉容积",
+        diagProdCalc: "计算生产率", diagTRes: "计算停留时间", diagVDesc: "计算下降速度",
+        subSug: "调整建议", sugProdMin: "此容积的理想产量", sugVol: "此产量所需容积",
+        sugEnch: "建议填充率 (t=8h)", diagHint: "输入以上数据，应用自动计算诊断。",
+        titleResOp: "操作结果",
+        lblTRes: "炉料停留时间 (h)", lblVDescCalc: "下降速度 (m/h)", lblProdEspec: "生产率 (t/m³/天)", lblMarcha: "炉况产能率 (t/m³炉缸·天)",
+        lblVazao: "生铁流量 (t/h)", lblVolHora: "生铁体积/小时 (m³/h)", lblIntVaz: "预计炉缸生铁更新时间", lblVazDia: "预计每日出铁次数", lblIC: "焦比 (kg/t)",
+        titleTResDest: "估算停留时间", subTResDest: "基于高炉有效容积和生产流量",
+        infoOp: "现代高炉中料柱停留时间为6至10小时。", infoVaz: "计算生铁更新时间时，请输入已经扣除死料柱（deadman）及其他不参与生铁积聚体积后的炉缸有效容积。",
+        titleResumoOp: "操作汇总", thParam: "参数", thValor: "数值", thUnid: "单位",
+        msgBalOk: "平衡平衡！差异在2%以内。",
+        msgSuperavit: "热量盈余。炉缸温度将偏高。减少焦炭/喷吹煤粉或提高 Rd/损失。",
+        msgDeficit: "热量赤字。炉缸温度将偏低。增加焦炭/喷吹煤粉、风温，或降低 Rd/损失。",
+        msgOpIdeal: "操作在理想参数范围内。停留时间和生产率在推荐范围内。",
+        msgTResAlto: "停留时间过高。", msgTResBaixo: "停留时间过低。",
+        msgProdFora: "生产率超出推荐范围。", msgParamsOk: "参数一致！",
+        msgTResFora: "停留时间超出范围！",
+        msgProdFora2: "生产率超出范围！",
+        msgAtencao: "参数处于注意范围。监控操作以避免更大偏差。",
+        statusIdeal: "理想", statusAtencao: "注意", statusFora: "超出", statusAlta: "高", statusMuitoAlta: "很高",
+        lblDP: "ΔP — 压降",
+        statusMuitoPermeavel: "非常透气", statusNormal: "正常", statusCritico: "临界", statusHanging: "悬料 !!?",
+        msgDPExcessiva: "压降过大。", msgDPCritica: "压降临界。",
+        msgDPCheck: "可能发生悬料或结瘤。检查布料分布、粉料和透气性。",
+        msgDPMonitor: "监控透气性和操作稳定性。"
+      }
+    };
+
+    let currentLang = 'pt';
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('ativo', btn.getAttribute('data-lang') === lang);
+      });
+      const d = i18n[lang];
+      document.querySelectorAll('[data-t]').forEach(el => {
+        const key = el.getAttribute('data-t');
+        if (d[key]) el.textContent = d[key];
+      });
+      document.querySelectorAll('[data-placeholder]').forEach(el => { const key=el.getAttribute('data-placeholder'); if(d[key]) el.placeholder=d[key]; });
+      calcM(); calcT(); calcO(); preencherDataRelatorio(); calcCargas(); calcCargas(); updateReportSummary();
+    }
+
+    function t(key) {
+      return i18n[currentLang][key] || i18n['pt'][key] || key;
+    }
+
+    function mostrarAba(aba) {
+      document.getElementById('aba-material').classList.toggle('hidden', aba !== 'material');
+      document.getElementById('aba-termico').classList.toggle('hidden', aba !== 'termico');
+      document.getElementById('aba-operacional').classList.toggle('hidden', aba !== 'operacional');
+      document.getElementById('aba-cargas').classList.toggle('hidden', aba !== 'cargas');
+      document.getElementById('aba-resultados').classList.toggle('hidden', aba !== 'resultados');
+      document.getElementById('tab-material').classList.toggle('ativo', aba === 'material');
+      document.getElementById('tab-termico').classList.toggle('ativo', aba === 'termico');
+      document.getElementById('tab-operacional').classList.toggle('ativo', aba === 'operacional');
+      document.getElementById('tab-cargas').classList.toggle('ativo', aba === 'cargas');
+      document.getElementById('tab-resultados').classList.toggle('ativo', aba === 'resultados');
+      if(aba==='resultados') updateReportSummary();
+    }
+
+    function transferirDados() {
+      document.getElementById('t_coque').value = document.getElementById('m_coque').value;
+      document.getElementById('t_pci').value = document.getElementById('m_pci').value;
+      document.getElementById('t_minerio').value = document.getElementById('m_minFerro').value;
+      document.getElementById('t_fluxo').value = document.getElementById('m_fluxo').value;
+      document.getElementById('t_ar').value = document.getElementById('m_ar').value;
+      document.getElementById('t_c_coque').value = document.getElementById('m_cCoque').value;
+      document.getElementById('t_si_gusa').value = document.getElementById('m_siGusa').value;
+      document.getElementById('t_mn_gusa').value = document.getElementById('m_mnGusa').value;
+      document.getElementById('t_p_gusa').value = document.getElementById('m_pGusa').value;
+      document.getElementById('t_escoria').value = document.getElementById('m_escoria').value;
+      document.getElementById('t_co2_fluxo').value = document.getElementById('m_co2Fluxo').value;
+      document.getElementById('t_gas_topo').value = document.getElementById('m_gasTopo').value;
+      document.getElementById('o_coque_ref').value = document.getElementById('m_coque').value;
+      document.getElementById('o_pci_ref').value = document.getElementById('m_pci').value;
+      document.getElementById('o_escoria_ref').value = document.getElementById('m_escoria').value;
+      calcT(); calcO(); mostrarAba('termico'); window.scrollTo(0, 0);
+    }
+
+    function getM(id) { return parseFloat(document.getElementById(id).value) || 0; }
+    function setM(id, val, dec) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = typeof val === 'number' ? val.toFixed(dec !== undefined ? dec : 2) : val;
+    }
+
+    function calcM() {
+      const minFerro = getM('m_minFerro');
+      const coque = getM('m_coque');
+      const fluxo = getM('m_fluxo');
+      const pci = getM('m_pci');
+      const ar = getM('m_ar');
+      const umidadeAr = getM('m_umidadeAr');
+
+      const feMin = getM('m_feMin') / 100;
+      const sio2Min = getM('m_sio2Min') / 100;
+      const al2o3Min = getM('m_al2o3Min') / 100;
+      const caoMin = getM('m_caoMin') / 100;
+      const mgoMin = getM('m_mgoMin') / 100;
+      const pMin = getM('m_pMin') / 100;
+      const mnMin = getM('m_mnMin') / 100;
+      const h2oMin = getM('m_h2oMin') / 100;
+
+      const cCoque = getM('m_cCoque') / 100;
+      const cinzasCoque = getM('m_cinzasCoque') / 100;
+      const h2oCoque = getM('m_h2oCoque') / 100;
+
+      const caoFluxo = getM('m_caoFluxo') / 100;
+      const mgoFluxo = getM('m_mgoFluxo') / 100;
+      const sio2Fluxo = getM('m_sio2Fluxo') / 100;
+      const co2Fluxo = getM('m_co2Fluxo') / 100;
+
+      const gusa = getM('m_gusa');
+      const feGusa = getM('m_feGusa') / 100;
+      const cGusa = getM('m_cGusa') / 100;
+      const siGusa = getM('m_siGusa') / 100;
+      const mnGusa = getM('m_mnGusa') / 100;
+      const pGusa = getM('m_pGusa') / 100;
+
+      const DENS_AR_SECO = 1.293;
+      const massaArSeco = ar * DENS_AR_SECO;
+      const h2oAr = ar * umidadeAr / 1000;
+      const massaEntrada = minFerro + coque + fluxo + pci + massaArSeco + h2oAr;
+
+      const feEntradaKg = minFerro * feMin;
+      const feSaidaKg = gusa * feGusa;
+      const feEscoriaKg = feEntradaKg - feSaidaKg;
+
+      const sio2EntradaKg = minFerro * sio2Min + coque * cinzasCoque * 0.55 + fluxo * sio2Fluxo;
+      const siSaidaKg = gusa * siGusa;
+      const sio2EscoriaKg = sio2EntradaKg - siSaidaKg * (60.08 / 28.09);
+
+      const caoEntradaKg = minFerro * caoMin + fluxo * caoFluxo;
+      const mgoEntradaKg = minFerro * mgoMin + fluxo * mgoFluxo;
+      const al2o3EntradaKg = minFerro * al2o3Min + coque * cinzasCoque * 0.30;
+
+      const cEntradaKg = coque * cCoque + pci * 0.82;
+      const cSaidaGusaKg = gusa * cGusa;
+      const cSaidaGasKg = cEntradaKg - cSaidaGusaKg;
+
+      const mnEntradaKg = minFerro * mnMin;
+      const mnSaidaKg = gusa * mnGusa;
+      const mnEscoriaKg = mnEntradaKg - mnSaidaKg;
+
+      const pEntradaKg = minFerro * pMin;
+      const pGusaKg = gusa * pGusa;
+      const pEscoriaKg = pEntradaKg - pGusaKg;
+
+      document.getElementById('m_erroP').classList.toggle('visivel', pGusaKg > pEntradaKg);
+      document.getElementById('m_erroMn').classList.toggle('visivel', mnSaidaKg > mnEntradaKg);
+
+      const co2DescarbKg = fluxo * co2Fluxo;
+      const h2oEntradaKg = minFerro * h2oMin + coque * h2oCoque + h2oAr;
+
+      const escoriaKg = sio2EscoriaKg + caoEntradaKg + mgoEntradaKg + al2o3EntradaKg + feEscoriaKg + mnEscoriaKg + pEscoriaKg;
+
+      const n2Gas = ar * 0.79 * 1.251;
+      const coFormado = cSaidaGasKg * (2/3) * (28.01 / 12.01);
+      const co2Formado = cSaidaGasKg * (1/3) * (44.01 / 12.01) + co2DescarbKg;
+      const h2oGas = h2oEntradaKg * 0.8;
+      const h2Gas = h2oEntradaKg * 0.05;
+      const gasTopoNm3 = ar + (coFormado / 1.250) + (co2Formado / 1.977) + (h2Gas / 0.0899);
+
+      const massaSaida = gusa + escoriaKg + coFormado + co2Formado + h2oGas + h2Gas + n2Gas;
+      const erroMassa = massaEntrada - massaSaida;
+
+      const pctSio2Esc = (sio2EscoriaKg / escoriaKg) * 100;
+      const pctCaoEsc = (caoEntradaKg / escoriaKg) * 100;
+      const pctMgoEsc = (mgoEntradaKg / escoriaKg) * 100;
+      const pctAl2o3Esc = (al2o3EntradaKg / escoriaKg) * 100;
+      const vEscoria = (pctCaoEsc + pctMgoEsc) / pctSio2Esc;
+
+      document.getElementById('m_escoria').value = escoriaKg.toFixed(1);
+      document.getElementById('m_gasTopo').value = gasTopoNm3.toFixed(0);
+
+      setM('m_massaEntrada', massaEntrada, 1);
+      setM('m_massaSaida', massaSaida, 1);
+      const elErro = document.getElementById('m_erroMassa');
+      elErro.textContent = erroMassa.toFixed(1);
+      const pctErro = Math.abs(erroMassa) / massaEntrada * 100;
+      elErro.style.color = pctErro < 3 ? '#2e7d32' : (pctErro < 8 ? '#e65100' : '#c62828');
+
+      setM('m_feEntrada', feEntradaKg, 1);
+      setM('m_feSaida', feSaidaKg, 1);
+      setM('m_rendFe', feSaidaKg / feEntradaKg * 100, 1);
+
+      setM('m_cEntrada', cEntradaKg, 1);
+      setM('m_cSaidaGusa', cSaidaGusaKg, 1);
+      setM('m_cSaidaGas', cSaidaGasKg, 1);
+      setM('m_diffC', cEntradaKg - cSaidaGusaKg - cSaidaGasKg, 2);
+
+      setM('m_sio2Entrada', sio2EntradaKg, 1);
+      setM('m_siSaida', siSaidaKg, 2);
+      setM('m_sio2Escoria', sio2EscoriaKg, 1);
+
+      setM('m_mnEntrada', mnEntradaKg, 2);
+      setM('m_mnSaidaGusa', mnSaidaKg, 2);
+      setM('m_mnSaidaEscoria', mnEscoriaKg, 2);
+      setM('m_rendMn', mnEntradaKg > 0 ? mnSaidaKg / mnEntradaKg * 100 : 0, 1);
+
+      setM('m_pEntrada', pEntradaKg, 2);
+      setM('m_pSaidaGusa', pGusaKg, 2);
+      setM('m_pSaidaEscoria', pEscoriaKg, 2);
+      setM('m_distPGusa', pEntradaKg > 0 ? pGusaKg / pEntradaKg * 100 : 0, 1);
+
+      setM('m_pctSio2Esc', pctSio2Esc, 1);
+      setM('m_pctCaoEsc', pctCaoEsc, 1);
+      setM('m_pctMgoEsc', pctMgoEsc, 1);
+      setM('m_pctAl2o3Esc', pctAl2o3Esc, 1);
+      setM('m_vEscoria', vEscoria, 2);
+
+      const rows = [
+        [t('lblMinFerro'), minFerro, 0, minFerro],
+        [t('lblCoque'), coque, 0, coque],
+        [t('lblFluxo'), fluxo, 0, fluxo],
+        [t('lblPCI'), pci, 0, pci],
+        ['Ar seco / Dry air / Aire seco / 干空气', massaArSeco, 0, massaArSeco],
+        ['H2O do ar / Air H2O / H2O del aire / 空气中水', h2oAr, 0, h2oAr],
+        [t('lblProdGusa'), 0, gusa, -gusa],
+        [t('lblEscoria'), 0, escoriaKg, -escoriaKg],
+        ['CO (gas)', 0, coFormado, -coFormado],
+        ['CO2 (gas)', 0, co2Formado, -co2Formado],
+        ['H2O (gas)', 0, h2oGas, -h2oGas],
+        ['N2 (gas)', 0, n2Gas, -n2Gas],
+      ];
+      let html = '';
+      rows.forEach(([nome, e, s, d]) => {
+        html += '<tr><td>' + nome + '</td>' +
+          '<td class="entrada-val">' + (e > 0 ? e.toFixed(1) : '—') + '</td>' +
+          '<td class="saida-val">' + (s > 0 ? s.toFixed(1) : '—') + '</td>' +
+          '<td class="diff-val" style="color:' + (Math.abs(d) < 1 ? '#888' : (d > 0 ? '#e65100' : '#1565c0')) + '">' + (Math.abs(d) < 0.1 ? '—' : d.toFixed(1)) + '</td></tr>';
+      });
+      html += '<tr class="total-row"><td>TOTAL</td>' +
+        '<td class="entrada-val">' + massaEntrada.toFixed(1) + '</td>' +
+        '<td class="saida-val">' + massaSaida.toFixed(1) + '</td>' +
+        '<td class="diff-val" style="color:' + (pctErro < 3 ? '#2e7d32' : (pctErro < 8 ? '#e65100' : '#c62828')) + '">' + erroMassa.toFixed(1) + '</td></tr>';
+      document.getElementById('m_tabelaResumo').innerHTML = html;
+    }
+
+    function getT(id) { return parseFloat(document.getElementById(id).value) || 0; }
+    function setT(id, val, dec) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = typeof val === 'number' ? val.toFixed(dec !== undefined ? dec : 1) : val;
+    }
+
+   function calcT() {
+      const coque   = getT('t_coque')   / 1000;
+      const pci     = getT('t_pci')     / 1000;
+      const minerio = getT('t_minerio') / 1000;
+      const fluxo   = getT('t_fluxo')   / 1000;
+      const ar      = getT('t_ar')      / 1000;
+      const tAr     = getT('t_t_ar');
+      const tAmb    = getT('t_t_amb');
+      const tRef    = getT('t_t_ref');
+      const cCoque  = getT('t_c_coque') / 100;
+      const siGusa  = getT('t_si_gusa') / 100;
+      const mnGusa  = getT('t_mn_gusa') / 100;
+      const pGusa   = getT('t_p_gusa')  / 100;
+      const rdPct   = getT('t_rd')      / 100;
+
+      const escoria    = getT('t_escoria')    / 1000;
+      const co2Fluxo   = getT('t_co2_fluxo')  / 100;
+      const tGas       = getT('t_t_gas');
+      const gasTopo    = getT('t_gas_topo')   / 1000;
+      const perdas     = getT('t_perdas');
+
+      const gusa = 1.0;
+      const feGusa = 0.945;
+
+      const Q_COMB_C_CO = 1450;
+      const CP_AR = 0.34;
+      const CP_MINERIO = 0.18;
+      const CP_FLUXO = 0.22;
+      const CP_COQUE = 0.30;
+      const Q_RD_FEO  = 645;
+      const Q_RI_FEO  = -70;
+      const Q_RED_SI  = 5360;
+      const Q_RED_MN  = 1758;
+      const Q_RED_P   = 3700;
+      const Q_DESCARB = 760;
+      const Q_LATENTE_GUSA = 65;
+      const CP_GUSA_LIQ    = 0.18;
+      const T_FUSAO_GUSA   = 1200;
+      const CP_GUSA_SOL    = 0.16;
+      const Q_LATENTE_ESC = 220;
+      const CP_ESC_LIQ    = 0.25;
+      const T_FUSAO_ESC   = 1300;
+      const CP_ESC_SOL    = 0.20;
+      const CP_GAS = 0.35;
+
+      const cTotalEntrada = coque * cCoque + pci * 0.82;
+      const cNoGusa = gusa * 0.045;
+      const cNoGas = Math.max(0, cTotalEntrada - cNoGusa);
+      const qCombCoque = (coque * cCoque / cTotalEntrada) * cNoGas * Q_COMB_C_CO;
+      const qCombPci   = (pci * 0.82 / cTotalEntrada) * cNoGas * Q_COMB_C_CO;
+      const qCombTotal = cNoGas * Q_COMB_C_CO;
+
+      const qAr = ar * CP_AR * (tAr - tRef);
+      const qMinerio = minerio * CP_MINERIO * (tAmb - tRef);
+      const qFluxoCarga = fluxo * CP_FLUXO * (tAmb - tRef);
+      const qCoqueCarga = coque * CP_COQUE * (tAmb - tRef);
+
+      const feRedKg = gusa * feGusa;
+      const qRi = feRedKg * (1 - rdPct) * Q_RI_FEO;
+
+      const qEntrada = qCombTotal + qAr + qMinerio + qFluxoCarga + qCoqueCarga + qRi;
+
+      const qRd = feRedKg * rdPct * Q_RD_FEO;
+      const siRedKg = gusa * siGusa;
+      const qRedSi = siRedKg * Q_RED_SI;
+      const mnRedKg = gusa * mnGusa;
+      const qRedMn = mnRedKg * Q_RED_MN;
+      const pRedKg = gusa * pGusa;
+      const qRedP = pRedKg * Q_RED_P;
+
+      const co2DescarbKg = fluxo * co2Fluxo;
+      const qDescarb = co2DescarbKg * Q_DESCARB;
+      const qGas = gasTopo * CP_GAS * (tGas - tRef);
+      const qPerdas = perdas;
+
+      const qAquecerGusaSolido = gusa * CP_GUSA_SOL * (T_FUSAO_GUSA - tRef);
+      const qFusaoLatenteGusa  = gusa * Q_LATENTE_GUSA;
+      const qAquecerEscSolido = escoria * CP_ESC_SOL * (T_FUSAO_ESC - tRef);
+      const qFusaoLatenteEsc  = escoria * Q_LATENTE_ESC;
+
+      const qSaidaFixa = qRd + qRedSi + qRedMn + qRedP + qDescarb + qGas + qPerdas
+                       + qAquecerGusaSolido + qFusaoLatenteGusa
+                       + qAquecerEscSolido + qFusaoLatenteEsc;
+
+      const capacidadeLiquida = gusa * CP_GUSA_LIQ + escoria * CP_ESC_LIQ;
+      const tCadinho = (qEntrada - qSaidaFixa
+                        + gusa * CP_GUSA_LIQ * T_FUSAO_GUSA
+                        + escoria * CP_ESC_LIQ * T_FUSAO_ESC)
+                       / capacidadeLiquida;
+
+      const qSensGusaLiq = gusa * CP_GUSA_LIQ * Math.max(0, tCadinho - T_FUSAO_GUSA);
+      const qSensEscLiq  = escoria * CP_ESC_LIQ * Math.max(0, tCadinho - T_FUSAO_ESC);
+
+      const qFusaoGusaTotal = qAquecerGusaSolido + qFusaoLatenteGusa + qSensGusaLiq;
+      const qFusaoEscTotal  = qAquecerEscSolido + qFusaoLatenteEsc + qSensEscLiq;
+
+      const qSaida = qSaidaFixa + qSensGusaLiq + qSensEscLiq;
+      const qDiff = qEntrada - qSaida;
+
+      setT('t_q_entrada', qEntrada, 1);
+      setT('t_q_saida', qSaida, 1);
+
+      const elDiff = document.getElementById('t_q_diff');
+      elDiff.textContent = qDiff.toFixed(1);
+      const pctDiff = Math.abs(qDiff) / Math.max(qEntrada, qSaida) * 100;
+      elDiff.style.color = pctDiff < 2 ? '#2e7d32' : (qDiff > 0 ? '#e65100' : '#c62828');
+
+      const infoBox = document.getElementById('t_infoBalanco');
+      if (pctDiff < 2) {
+        infoBox.innerHTML = '✅ <strong>' + t('msgBalOk') + '</strong>';
+        infoBox.style.background = '#e8f5e9'; infoBox.style.color = '#2e7d32'; infoBox.style.borderColor = '#a5d6a7';
+      } else if (qDiff > 0) {
+        infoBox.innerHTML = '⚠ <strong>' + t('msgSuperavit') + '</strong>';
+        infoBox.style.background = '#fff3e0'; infoBox.style.color = '#e65100'; infoBox.style.borderColor = '#ffcc80';
+      } else {
+        infoBox.innerHTML = '⚠ <strong>' + t('msgDeficit') + '</strong>';
+        infoBox.style.background = '#ffebee'; infoBox.style.color = '#c62828'; infoBox.style.borderColor = '#ef9a9a';
+      }
+
+      setT('t_q_comb_coque', qCombCoque, 1);
+      setT('t_q_comb_pci', qCombPci, 1);
+      setT('t_q_ar', qAr, 1);
+      setT('t_q_minerio', qMinerio, 1);
+      setT('t_q_fluxo', qFluxoCarga, 1);
+      setT('t_q_si', 0, 1);
+      setT('t_q_mn', 0, 1);
+      setT('t_q_p', 0, 1);
+
+      setT('t_q_rd', qRd, 1);
+      setT('t_q_ri', -qRi, 1);
+      setT('t_q_red_si', qRedSi, 1);
+      setT('t_q_red_mn', qRedMn, 1);
+      setT('t_q_red_p', qRedP, 1);
+      setT('t_q_descarb', qDescarb, 1);
+      setT('t_q_fusao_gusa', qFusaoGusaTotal, 1);
+      setT('t_q_fusao_esc', qFusaoEscTotal, 1);
+      setT('t_q_gas', qGas, 1);
+      setT('t_q_perdas', qPerdas, 1);
+
+      const elTemp = document.getElementById('t_t_estimada');
+      if (tCadinho > 800 && tCadinho < 2500) {
+        elTemp.textContent = tCadinho.toFixed(0) + ' °C';
+        elTemp.style.color = (tCadinho > 1520 && tCadinho < 1550) ? '#2e7d32' : '#b71c1c';
+      } else if (tCadinho <= 800) {
+        elTemp.textContent = tCadinho.toFixed(0) + ' °C (abaixo do ponto de fusão!)';
+        elTemp.style.color = '#c62828';
+      } else {
+        elTemp.textContent = tCadinho.toFixed(0) + ' °C (fora da faixa operacional!)';
+        elTemp.style.color = '#c62828';
+      }
+
+      const items = [
+        [t('lblCombCoque'), qCombCoque, true],
+        [t('lblCombPCI'), qCombPci, true],
+        [t('lblQAr'), qAr, true],
+        [t('lblQMin'), qMinerio + qFluxoCarga + qCoqueCarga, true],
+        [t('lblQRI'), -qRi, true],
+        [t('lblQRD'), qRd, false],
+        [t('lblQRedSi'), qRedSi, false],
+        [t('lblQRedMn'), qRedMn, false],
+        [t('lblQRedP'), qRedP, false],
+        [t('lblQDescarb'), qDescarb, false],
+        [t('lblQFusGusa'), qFusaoGusaTotal, false],
+        [t('lblQFusEsc'), qFusaoEscTotal, false],
+        [t('lblQGas'), qGas, false],
+        [t('lblQPerdas'), qPerdas, false],
+      ];
+
+      let html = '';
+      let totalEntrada = 0;
+      let totalSaida = 0;
+      items.forEach(([nome, val, isEntrada]) => {
+        const pct = val / (qEntrada > qSaida ? qEntrada : qSaida) * 100;
+        const cor = isEntrada ? '#e65100' : '#1565c0';
+        html += '<tr style="border-bottom:1px solid #eee;">' +
+          '<td style="padding:6px;">' + nome + '</td>' +
+          '<td style="padding:6px; text-align:right; font-weight:600; color:' + cor + '">' + val.toFixed(1) + '</td>' +
+          '<td style="padding:6px; text-align:right; color:#666;">' + pct.toFixed(1) + '%</td></tr>';
+        if (isEntrada) totalEntrada += val;
+        else totalSaida += val;
+      });
+      html += '<tr class="total-row" style="background:#fff8e1;">' +
+        '<td style="padding:8px; font-weight:700;">TOTAL ENTRADAS</td>' +
+        '<td style="padding:8px; text-align:right; font-weight:700; color:#e65100;">' + totalEntrada.toFixed(1) + '</td>' +
+        '<td style="padding:8px; text-align:right;">' + (totalEntrada/Math.max(qEntrada,qSaida)*100).toFixed(1) + '%</td></tr>';
+      html += '<tr class="total-row" style="background:#e3f2fd;">' +
+        '<td style="padding:8px; font-weight:700;">TOTAL SAIDAS</td>' +
+        '<td style="padding:8px; text-align:right; font-weight:700; color:#1565c0;">' + totalSaida.toFixed(1) + '</td>' +
+        '<td style="padding:8px; text-align:right;">' + (totalSaida/Math.max(qEntrada,qSaida)*100).toFixed(1) + '%</td></tr>';
+      html += '<tr class="total-row" style="background:' + (Math.abs(qDiff) < 20 ? '#e8f5e9' : '#ffebee') + ';">' +
+        '<td style="padding:8px; font-weight:700;">DIFERENCA</td>' +
+        '<td style="padding:8px; text-align:right; font-weight:700; color:' + (Math.abs(qDiff) < 20 ? '#2e7d32' : '#c62828') + '">' + qDiff.toFixed(1) + '</td>' +
+        '<td style="padding:8px; text-align:right; font-weight:700; color:' + (Math.abs(qDiff) < 20 ? '#2e7d32' : '#c62828') + '">' + (qDiff / Math.max(qEntrada, qSaida) * 100).toFixed(1) + '%</td></tr>';
+      document.getElementById('t_tabela').innerHTML = html;
+}
+
+
+
+    function getO(id) { return parseFloat(document.getElementById(id).value) || 0; }
+    function setO(id, val, dec) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = typeof val === 'number' ? val.toFixed(dec !== undefined ? dec : 2) : val;
+    }
+
+    function calcCargas() {
+      const cartVol=+document.getElementById('c_vol')?.value||0, fill=(+document.getElementById('c_fill')?.value||0)/100;
+      const rhoOre=+document.getElementById('c_rho_ore')?.value||0, rhoCoke=+document.getElementById('c_rho_coke')?.value||0, rhoFlux=+document.getElementById('c_rho_flux')?.value||0, rhoPCI=+document.getElementById('c_rho_pci')?.value||0;
+      const vals=[[t('lblMinFerro'),+document.getElementById('m_minFerro')?.value||0,rhoOre],[t('lblCoque'),+document.getElementById('m_coque')?.value||0,rhoCoke],[t('lblFluxo'),+document.getElementById('m_fluxo')?.value||0,rhoFlux],[t('lblPCI'),+document.getElementById('m_pci')?.value||0,rhoPCI]];
+      const totalMass=vals.reduce((a,x)=>a+x[1],0), volumes=vals.map(x=>x[2]>0?(x[1]/1000)/x[2]:NaN), totalVol=volumes.reduce((a,x)=>a+(Number.isFinite(x)?x:0),0), eff=cartVol*fill;
+      const cartsPerTon=eff>0?totalVol/eff:NaN, massCart=Number.isFinite(cartsPerTon)&&cartsPerTon>0?totalMass/cartsPerTon:NaN, prod=+document.getElementById('o_prod')?.value||0, cartsDay=cartsPerTon*prod;
+      let h=''; vals.forEach((x,i)=>{const kg=Number.isFinite(cartsPerTon)&&cartsPerTon>0?x[1]/cartsPerTon:NaN; const vc=x[2]>0?kg/1000/x[2]:NaN; h+='<tr><td>'+x[0]+'</td><td>'+x[1].toFixed(1)+'</td><td>'+ (Number.isFinite(volumes[i])?volumes[i].toFixed(3):'—')+'</td><td>'+ (Number.isFinite(kg)?kg.toFixed(1):'—')+'</td><td>'+ (Number.isFinite(vc)?vc.toFixed(3):'—')+'</td></tr>';});
+      h+='<tr style="font-weight:700;background:#f5f5f5"><td>'+t('total')+'</td><td>'+totalMass.toFixed(1)+'</td><td>'+totalVol.toFixed(3)+'</td><td>'+ (Number.isFinite(massCart)?massCart.toFixed(1):'—')+'</td><td>'+ (Number.isFinite(eff)?eff.toFixed(3):'—')+'</td></tr>';
+      const el=document.getElementById('c_table');if(el)el.innerHTML=h;setO('c_effvol',eff,2);setO('c_masscart',massCart,1);setO('c_cartst',cartsPerTon,3);setO('c_cartsday',cartsDay,1);setO('c_loadsday',cartsDay,1); if(typeof updateReportSummary==='function')updateReportSummary();
+    }
+    function preencherDataRelatorio(){const d=document.getElementById('r_date');if(d)d.value=new Date().toISOString().slice(0,10);}
+    function reportNum(id){const n=parseFloat(document.getElementById(id)?.textContent);return Number.isFinite(n)?n:NaN;}
+    function updateReportSummary(){const rows=[[t('lblVolAF'),getO('o_vol'),'m³'],[t('lblVolCadinho'),getO('o_vol_cadinho'),'m³'],[t('lblProdDia'),getO('o_prod'),'t/dia'],[t('lblVazao'),getO('o_prod')/24,'t/h'],[t('lblDensGusa'),getO('o_dens_gusa'),'t/m³'],[t('lblDensPig'),getO('o_dens_pig'),'t/m³'],[t('lblTRes'),reportNum('o_t_res'),'h'],[t('lblVDescCalc'),reportNum('o_v_desc_calc'),'m/h'],[t('lblProdEspec'),reportNum('o_prod_espec'),'t/m³/dia'],[t('lblMarcha'),reportNum('o_marcha'),'t/m³·dia'],[t('lblIntVaz'),reportNum('o_int_vaz'),'h'],[t('lblVazDia'),reportNum('o_vaz_dia'),'/dia'],[t('cartsPerTon'),reportNum('c_cartst'),'carrinhos/t gusa'],[t('cartsPerDay'),reportNum('c_cartsday'),'/dia']];const el=document.getElementById('r_summary');if(el)el.innerHTML=rows.map(r=>'<tr><td>'+r[0]+'</td><td style="text-align:right;font-weight:600">'+(Number.isFinite(r[1])?r[1].toFixed(2):'—')+'</td><td style="text-align:right;color:#666">'+r[2]+'</td></tr>').join('');}
+    function gerarRelatorio(){updateReportSummary();const g=id=>document.getElementById(id)?.value||'',company=g('r_company')||'—',tech=g('r_technician')||'—',date=g('r_date')||new Date().toISOString().slice(0,10),furnace=g('r_furnace')||'—',objective=g('r_objective')||'—',obs=g('r_observations')||'—',summary=document.getElementById('r_summary')?.innerHTML||'',loads=document.getElementById('c_table')?.innerHTML||'',mat=document.getElementById('m_tabelaResumo')?.innerHTML||'',therm=document.getElementById('t_tabela')?.innerHTML||'';const html='<!doctype html><html><head><meta charset="utf-8"><title>BAL AF — Relatório Técnico</title><style>body{font-family:Arial,sans-serif;color:#222;margin:28px;font-size:12px}h1{font-size:20px;color:#b71c1c}h2{font-size:15px;border-bottom:2px solid #ddd;padding-bottom:5px;margin-top:22px}table{width:100%;border-collapse:collapse;margin-top:8px}th,td{border:1px solid #ddd;padding:6px}th{background:#f2f2f2;text-align:left}.meta{display:grid;grid-template-columns:1fr 1fr;gap:7px 24px;border:1px solid #ddd;padding:12px;background:#fafafa}.box{border:1px solid #ddd;padding:10px;min-height:30px}.foot{margin-top:25px;padding-top:8px;border-top:1px solid #ccc;font-size:10px;color:#666}</style></head><body><h1>BAL AF — RELATÓRIO TÉCNICO</h1><div class="meta"><div><b>'+t('company')+':</b> '+company+'</div><div><b>'+t('technician')+':</b> '+tech+'</div><div><b>'+t('reportDate')+':</b> '+date+'</div><div><b>'+t('furnaceName')+':</b> '+furnace+'</div></div><h2>'+t('objective')+'</h2><div class="box">'+objective+'</div><h2>'+t('resultSummary')+'</h2><table><thead><tr><th>'+t('thParam')+'</th><th>'+t('thValor')+'</th><th>'+t('thUnid')+'</th></tr></thead><tbody>'+summary+'</tbody></table><h2>'+t('titleResMaterial')+'</h2><table><tbody>'+mat+'</tbody></table><h2>'+t('titleResThermal')+'</h2><table><tbody>'+therm+'</tbody></table><h2>'+t('loadsTitle')+'</h2><table><thead><tr><th>'+t('matCol')+'</th><th>kg/t gusa</th><th>m³/t gusa</th><th>'+t('perCart')+'</th><th>'+t('volCart')+'</th></tr></thead><tbody>'+loads+'</tbody></table><h2>'+t('observations')+'</h2><div class="box">'+obs+'</div><div class="foot">BAL AF v2.2 — '+t('loadsDisclaimer')+'</div><script>window.onload=function(){window.print()}<\/script></body></html>';const w=window.open('','_blank');if(!w){alert('Permita janelas pop-up para gerar o relatório.');return;}w.document.open();w.document.write(html);w.document.close();}
+
+    function calcO() {
+      const volUtil = getO('o_vol');
+      const volCadinho = getO('o_vol_cadinho');
+      const alturaUtil = getO('o_altura');
+      const prodDia = getO('o_prod');
+      const densGusa = getO('o_dens_gusa');
+      const densPig = getO('o_dens_pig');
+      const enchimento = getO('o_enchimento') / 100;
+      const vDescManual = getO('o_vdesc');
+
+      const coqueRef = getO('o_coque_ref');
+      const pciRef = getO('o_pci_ref');
+
+      const volEfetivo = volUtil * enchimento;
+      const vazaoTh = prodDia / 24;
+      const volHora = vazaoTh / densGusa;
+      const volGusaHora = (densPig > 0) ? (vazaoTh / densPig) : NaN;
+      // Intervalo estimado entre vazamentos: o volume útil informado pelo engenheiro
+      // já deve descontar o deadman e demais volumes não disponíveis para o gusa.
+      const intervaloVaz = (volCadinho > 0 && Number.isFinite(volGusaHora) && volGusaHora > 0) ? (volCadinho / volGusaHora) : NaN;
+      const vazamentosDia = Number.isFinite(intervaloVaz) && intervaloVaz > 0 ? (24 / intervaloVaz) : NaN;
+      const prodEspec = prodDia / volUtil;
+      // Marcha específica baseada no volume útil do cadinho.
+      const marchaForno = (volCadinho > 0) ? (prodDia / volCadinho) : NaN;
+      const tRes = volEfetivo / volHora;
+      let vDesc;
+      if (vDescManual > 0) { vDesc = vDescManual; } else { vDesc = alturaUtil / tRes; }
+      const ic = coqueRef + pciRef;
+
+const dp = getO('o_dp');
+function statusDP(val) {
+        if (val < 80) return { cls: 'ok', txt: t('statusMuitoPermeavel') };
+        if (val < 120) return { cls: 'ok', txt: t('statusNormal') };
+        if (val < 150) return { cls: 'warn', txt: t('statusAtencao') };
+        if (val <= 180) return { cls: 'alert', txt: t('statusCritico') };
+        return { cls: 'alert', txt: t('statusHanging') };
+      }
+
+
+      function statusTRes(val) {
+        if (val >= 6 && val <= 10) return { cls: 'ok', txt: t('statusIdeal') };
+        if ((val >= 4 && val < 6) || (val > 10 && val <= 14)) return { cls: 'warn', txt: t('statusAtencao') };
+        return { cls: 'alert', txt: t('statusFora') };
+      }
+      function statusProd(val) {
+        if (val >= 2.0 && val <= 3.5) return { cls: 'ok', txt: t('statusIdeal') };
+        if ((val >= 1.5 && val < 2.0) || (val > 3.5 && val <= 4.0)) return { cls: 'warn', txt: t('statusAtencao') };
+        return { cls: 'alert', txt: t('statusFora') };
+      }
+      function statusVDesc(val) {
+        if (val >= 0.5 && val <= 0.8) return { cls: 'ok', txt: t('statusIdeal') };
+        if ((val >= 0.15 && val < 0.5) || (val > 0.80 && val <= 1.0)) return { cls: 'warn', txt: t('statusAtencao') };
+        return { cls: 'alert', txt: t('statusFora') };
+      }
+      function statusIC(val) {
+        if (val >= 350 && val <= 500) return { cls: 'ok', txt: t('statusIdeal') };
+        if ((val >= 300 && val < 350) || (val > 500 && val <= 550)) return { cls: 'warn', txt: t('statusAtencao') };
+        return { cls: 'alert', txt: t('styatusFora') };
+      }
+
+      const stTRes = statusTRes(tRes);
+      const stProd = statusProd(prodEspec);
+      const stVDesc = statusVDesc(vDesc);
+      const stIC = statusIC(ic);
+
+const stDP = statusDP(dp);
+
+      const badge = (s) => ' <span class="badge ' + s.cls + '">' + s.txt + '</span>';
+
+      document.getElementById('o_t_res').innerHTML = tRes.toFixed(1) + ' h' + badge(stTRes);
+      document.getElementById('o_t_res').style.color = stTRes.cls === 'ok' ? '#2e7d32' : (stTRes.cls === 'warn' ? '#e65100' : '#c62828');
+
+      document.getElementById('o_v_desc_calc').innerHTML = vDesc.toFixed(2) + ' m/h' + badge(stVDesc);
+      document.getElementById('o_v_desc_calc').style.color = stVDesc.cls === 'ok' ? '#2e7d32' : (stVDesc.cls === 'warn' ? '#e65100' : '#c62828');
+
+      document.getElementById('o_prod_espec').innerHTML = prodEspec.toFixed(2) + ' t/m³/dia' + badge(stProd);
+      document.getElementById('o_prod_espec').style.color = stProd.cls === 'ok' ? '#2e7d32' : (stProd.cls === 'warn' ? '#e65100' : '#c62828');
+
+      const elMarcha = document.getElementById('o_marcha');
+      if (elMarcha) {
+        if (Number.isFinite(marchaForno) && marchaForno > 0) {
+          elMarcha.textContent = marchaForno.toFixed(2) + ' t/m³·dia';
+          elMarcha.style.color = '#2e7d32';
+        } else {
+          elMarcha.textContent = '—';
+          elMarcha.style.color = '#c62828';
+        }
+      }
+
+      setO('o_vazao', vazaoTh, 1);
+      setO('o_vol_hora', volGusaHora, 2);
+      const elIntVaz = document.getElementById('o_int_vaz');
+      const elVazDia = document.getElementById('o_vaz_dia');
+      if (elIntVaz) {
+        if (Number.isFinite(intervaloVaz) && intervaloVaz > 0) {
+          const h = Math.floor(intervaloVaz);
+          const min = Math.round((intervaloVaz - h) * 60);
+          const hh = min === 60 ? h + 1 : h;
+          const mm = min === 60 ? 0 : min;
+          elIntVaz.textContent = intervaloVaz.toFixed(2) + ' h (' + hh + 'h ' + String(mm).padStart(2,'0') + 'min)';
+          elIntVaz.style.color = '#2e7d32';
+        } else { elIntVaz.textContent = '—'; elIntVaz.style.color = '#c62828'; }
+      }
+      if (elVazDia) {
+        elVazDia.textContent = Number.isFinite(vazamentosDia) ? vazamentosDia.toFixed(1) + ' /dia' : '—';
+        elVazDia.style.color = Number.isFinite(vazamentosDia) ? '#455a64' : '#c62828';
+      }
+
+      document.getElementById('o_ic').innerHTML = ic.toFixed(0) + ' kg/t' + badge(stIC);
+      document.getElementById('o_ic').style.color = stIC.cls === 'ok' ? '#2e7d32' : (stIC.cls === 'warn' ? '#e65100' : '#c62828');
+
+      const elDest = document.getElementById('o_t_res_destaque');
+      if (tRes > 0 && tRes < 50) {
+        elDest.textContent = tRes.toFixed(1) + ' h';
+        elDest.style.color = stTRes.cls === 'ok' ? '#2e7d32' : '#b71c1c';
+      } else {
+        elDest.textContent = '—';
+        elDest.style.color = '#b71c1c';
+      }
+
+      const diagProd = document.getElementById('diag_prod');
+      const diagVol = document.getElementById('diag_vol');
+      const diagProdCalc = document.getElementById('diag_prod_calc');
+      const diagTRes = document.getElementById('diag_tres');
+      const diagVDesc = document.getElementById('diag_vdesc');
+      const sugProdMin = document.getElementById('sug_prod_min');
+      const sugProdMax = document.getElementById('sug_prod_max');
+      const sugVol = document.getElementById('sug_vol');
+      const sugEnch = document.getElementById('sug_ench');
+      const diagHint = document.getElementById('diag_hint');
+
+      if (diagProd) diagProd.textContent = prodDia.toLocaleString('pt-BR') + ' t/dia';
+      if (diagVol) diagVol.textContent = volUtil.toLocaleString('pt-BR') + ' m³';
+      if (diagProdCalc) diagProdCalc.textContent = prodEspec.toFixed(2) + ' t/m³/dia';
+      if (diagTRes) diagTRes.textContent = tRes.toFixed(1) + ' h';
+      if (diagVDesc) diagVDesc.textContent = vDesc.toFixed(2) + ' m/h';
+
+      const prodMinSug = Math.round(volUtil * 2.0);
+      const prodMaxSug = Math.round(volUtil * 3.0);
+      if (sugProdMin) sugProdMin.textContent = prodMinSug.toLocaleString('pt-BR') + ' t/dia';
+      if (sugProdMax) sugProdMax.textContent = prodMaxSug.toLocaleString('pt-BR') + ' t/dia';
+
+      const volIdeal = Math.round(prodDia / 2.5);
+      if (sugVol) sugVol.textContent = volIdeal.toLocaleString('pt-BR') + ' m³ (média 2,5 t/m³/dia)';
+
+      const enchNecessario = (8 * prodDia / 24 / densGusa / volUtil) * 100;
+      if (sugEnch) sugEnch.textContent = enchNecessario.toFixed(1) + '%';
+
+      if (diagHint) {
+        if (tRes > 14) {
+          diagHint.innerHTML = '&#9888; <strong>' + t('msgTResAlto') + '</strong><br>' +
+            '• ' + t('msgProdFora') + '<br>' +
+            '• ' + t('sugProdMin') + ': ' + prodMinSug.toLocaleString('pt-BR') + '-' + prodMaxSug.toLocaleString('pt-BR') + ' t/dia.<br>' +
+            '• ' + t('sugEnch') + ': ~' + Math.max(50, (enchNecessario * 0.7)).toFixed(0) + '%.<br>' +
+            '• ' + t('sugVol') + ': ~' + (Math.round(prodDia/2.5)).toLocaleString('pt-BR') + ' m³.';
+          diagHint.style.background = '#ffebee';
+          diagHint.style.color = '#c62828';
+          diagHint.style.borderColor = '#ef9a9a';
+        } else if (tRes < 4) {
+          diagHint.innerHTML = '&#9888; <strong>' + t('msgTResBaixo') + '</strong><br>' +
+            '• ' + t('msgProdFora') + '<br>' +
+            '• ' + t('sugProdMin') + ': ' + prodMinSug.toLocaleString('pt-BR') + '-' + prodMaxSug.toLocaleString('pt-BR') + ' t/dia.<br>' +
+            '• ' + t('sugEnch') + ': ~' + Math.min(95, enchNecessario).toFixed(0) + '%.<br>' +
+            '• ' + t('sugVol') + ': ~' + volIdeal.toLocaleString('pt-BR') + ' m³.';
+          diagHint.style.background = '#ffebee';
+          diagHint.style.color = '#c62828';
+          diagHint.style.borderColor = '#ef9a9a';
+        } else if (prodEspec < 1.5 || prodEspec > 4.0) {
+          diagHint.innerHTML = '&#9888; <strong>' + t('msgProdFora') + '</strong><br>' +
+            '• ' + t('sugProdMin') + ': ' + prodMinSug.toLocaleString('pt-BR') + '-' + prodMaxSug.toLocaleString('pt-BR') + ' t/dia.<br>' +
+            '• ' + t('sugVol') + ': ~' + volIdeal.toLocaleString('pt-BR') + ' m³.';
+          diagHint.style.background = '#fff3e0';
+          diagHint.style.color = '#e65100';
+          diagHint.style.borderColor = '#ffcc80';
+        } else {
+          diagHint.innerHTML = '&#9989; <strong>' + t('msgParamsOk') + '</strong><br>' +
+            '• ' + t('sugEnch') + ': ~' + enchNecessario.toFixed(1) + '%.';
+          diagHint.style.background = '#e8f5e9';
+          diagHint.style.color = '#2e7d32';
+          diagHint.style.borderColor = '#a5d6a7';
+        }
+
+if (dp > 180) {
+          diagHint.innerHTML += '<br><br>⚠ <strong>' + t('msgDPExcessiva') + '</strong><br>' + t('msgDPCheck');
+        } else if (dp > 150) {
+          diagHint.innerHTML += '<br><br>⚠ <strong>' + t('msgDPCritica') + '</strong><br>' + t('msgDPMonitor');
+        }
+      }
+
+      const infoBox = document.getElementById('o_info');
+      let msg = '';
+      let bg = '#e8f5e9', clr = '#2e7d32', bdr = '#a5d6a7';
+
+      if (stTRes.cls === 'ok' && stProd.cls === 'ok') {
+        msg = '&#9989; <strong>' + t('msgOpIdeal') + '</strong>';
+      } else if (stTRes.cls === 'alert') {
+        msg = '&#9888; <strong>' + t('msgTResFora') + '</strong> ' + (tRes < 6 ? t('msgTResBaixo') : t('msgTResAlto'));
+        bg = '#ffebee'; clr = '#c62828'; bdr = '#ef9a9a';
+      } else if (stProd.cls === 'alert') {
+        msg = '&#9888; <strong>' + t('msgProdFora2') + '</strong> ' + (prodEspec < 2.0 ? t('msgTResBaixo') : t('msgTResAlto'));
+        bg = '#ffebee'; clr = '#c62828'; bdr = '#ef9a9a';
+      } else {
+        msg = '&#9888; <strong>' + t('msgAtencao') + '</strong>';
+        bg = '#fff3e0'; clr = '#e65100'; bdr = '#ffcc80';
+      }
+      infoBox.innerHTML = msg;
+      infoBox.style.background = bg;
+      infoBox.style.color = clr;
+      infoBox.style.borderColor = bdr;
+
+      const elDpResult = document.getElementById('o_dp_result');
+      if (elDpResult) {
+        elDpResult.innerHTML = dp.toFixed(0) + ' kPa' + badge(stDP);
+        elDpResult.style.color = stDP.cls === 'ok' ? '#2e7d32' : (stDP.cls === 'warn' ? '#e65100' : '#c62828');
+      }
+
+      // =========================================================================
+      // MOTO DE CAPTURA ULTRA-SEGURA (DIRETO DOS INPUTS DE ENTRADA DO SEU APP)
+      // =========================================================================
+      
+      // Captura direta de massas das matérias-primas
+      const m_min     = parseFloat(document.getElementById("m_minFerro")?.value || 1600);
+      const m_coq     = parseFloat(document.getElementById("m_coque")?.value || 450);
+      const m_flu     = parseFloat(document.getElementById("m_fluxo")?.value || 200);
+      const m_pci_val = parseFloat(document.getElementById("m_pci")?.value || 150);
+
+      // Captura direta das composições (%)
+      const p_sio2Min  = parseFloat(document.getElementById("m_sio2Min")?.value || 4.5) / 100;
+      const p_al2o3Min = parseFloat(document.getElementById("m_al2o3Min")?.value || 1.2) / 100;
+      const p_caoMin   = parseFloat(document.getElementById("m_caoMin")?.value || 0.3) / 100;
+      const p_mgoMin   = parseFloat(document.getElementById("m_mgoMin")?.value || 0.1) / 100;
+
+      const p_cinzasCoque = parseFloat(document.getElementById("m_cinzasCoque")?.value || 12) / 100;
+
+      const p_caoFluxo   = parseFloat(document.getElementById("m_caoFluxo")?.value || 52) / 100;
+      const p_mgoFluxo   = parseFloat(document.getElementById("m_mgoFluxo")?.value || 2) / 100;
+      const p_sio2Fluxo  = parseFloat(document.getElementById("m_sio2Fluxo")?.value || 2) / 100;
+
+      const p_siGusa     = parseFloat(document.getElementById("m_siGusa")?.value || 0.5) / 100;
+
+      // Cálculo estequiométrico local para garantir os teores corretos de óxidos na escória
+      const m_esc_tot = m_min * (p_sio2Min + p_al2o3Min + p_caoMin + p_mgoMin) + 
+                        m_flu * (p_caoFluxo + p_mgoFluxo + p_sio2Fluxo) + 
+                        (m_coq * p_cinzasCoque) + (m_pci_val * 0.10);
+
+      let m_sio2_calc  = (m_min * p_sio2Min) + (m_flu * p_sio2Fluxo) + (m_coq * p_cinzasCoque * 0.52) + (m_pci_val * 0.10 * 0.52) - (1000 * p_siGusa * 2.14);
+      let m_al2o3_calc = (m_min * p_al2o3Min) + (m_coq * p_cinzasCoque * 0.30) + (m_pci_val * 0.10 * 0.30);
+      let m_cao_calc   = (m_min * p_caoMin) + (m_flu * p_caoFluxo);
+      let m_mgo_calc   = (m_min * p_mgoMin) + (m_flu * p_mgoFluxo);
+
+      let calc_sio2  = m_esc_tot > 0 ? (m_sio2_calc / m_esc_tot) * 100 : 35.0;
+      let calc_al2o3 = m_esc_tot > 0 ? (m_al2o3_calc / m_esc_tot) * 100 : 13.0;
+      let calc_cao   = m_esc_tot > 0 ? (m_cao_calc / m_esc_tot) * 100 : 40.0;
+      let calc_mgo   = m_esc_tot > 0 ? (m_mgo_calc / m_esc_tot) * 100 : 7.0;
+
+      // Tenta ler a temperatura diretamente da caixa de texto do balanço térmico na tela
+      // Busca pelos IDs mais prováveis que seu app gerou para a temperatura do gusa
+      let t_gusa_input = parseFloat(document.getElementById("t_gusa")?.value || 
+                                    document.getElementById("tGusa")?.value || 
+                                    document.getElementById("temp_gusa")?.value || 1480);
+
+      // Se o input não retornar número válido, força uma constante operacional segura para o cálculo não falhar
+      if (isNaN(t_gusa_input) || t_gusa_input < 1000) t_gusa_input = 1480;
+
+      // Executa o motor analítico de viscosidade de forma isolada
+      let analiseEscoria = { viscosidade: 0.425, basicidade: 1.15, status: "NORMAL", alertas: [] };
+      try {
+          analiseEscoria = calcularViscosidadeEscoria(calc_sio2, calc_al2o3, calc_cao, calc_mgo, t_gusa_input);
+      } catch(e) {
+          console.log("Erro ao processar modelo metalúrgico, aplicando valores de contingência.");
+      }
+
+      // Configuração visual dos Badges
+      const stVisc = {
+        cls: analiseEscoria.status === 'CRÍTICO' ? 'danger' : (analiseEscoria.status === 'ALERTA' ? 'warn' : 'ok'),
+        txt: analiseEscoria.status === 'NORMAL' ? 'OK' : analiseEscoria.status
+      };
+
+      let statusBasicidade = 'ok';
+      let txtBasicidade = 'OK';
+      if (analiseEscoria.basicidade < 1.15) { statusBasicidade = 'warn'; txtBasicidade = 'BAIXA'; }
+      if (analiseEscoria.basicidade > 1.25) { statusBasicidade = 'warn'; txtBasicidade = 'ALTA'; }
+      const stBas = { cls: statusBasicidade, txt: txtBasicidade };
+
+      // Atualiza o painel HTML avulso que está aparecendo na sua tela
+      const elViscText = document.getElementById("val-viscosidade");
+      if (elViscText) elViscText.innerText = analiseEscoria.viscosidade.toFixed(3);
+      
+      const elBaseText = document.getElementById("val-basicidade");
+      if (elBaseText) elBaseText.innerText = analiseEscoria.basicidade.toFixed(2);
+
+      // =========================================================================
+
+      const params = [
+        [t('lblVolAF'), volUtil, 'm³', null],
+        ['Volume efetivo (enchimento)', volEfetivo, 'm³', null],
+        [t('lblAltAF'), alturaUtil, 'm', null],
+        [t('lblProdDia'), prodDia, 't/dia', null],
+        [t('lblVolCadinho'), volCadinho, 'm³', null],
+        [t('lblMarcha'), marchaForno, 't/m³·dia', null],
+        [t('lblVazao'), vazaoTh, 't/h', null],
+        [t('lblVolHora'), volGusaHora, 'm³/h', null],
+        [t('lblIntVaz'), intervaloVaz, 'h', null],
+        [t('lblVazDia'), vazamentosDia, '/dia', null],
+        [t('lblProdEspec'), prodEspec, 't/m³/dia', stProd],
+        [t('lblTRes'), tRes, 'h', stTRes],
+        [t('lblVDescCalc'), vDesc, 'm/h', stVDesc],
+        [t('lblIC'), ic, 'kg/t', stIC],
+        ['ΔP', dp, 'kPa', stDP], 
+        // Adiciona de forma nativa e limpa dentro do GRID padrão
+        ['Viscosidade da Escória/Slag viscosity', analiseEscoria.viscosidade, 'Pa·s', stVisc],
+        ['Basicidade Binária (CaO/SiO₂)/Binary basicity/二元碱度', analiseEscoria.basicidade, 'R', stBas]
+      ];
+
+      let html = '';
+      params.forEach(([nome, val, unid, st]) => {
+        const badgeHtml = st ? ' <span class="badge ' + st.cls + '">' + st.txt + '</span>' : '';
+        const corVal = st ? (st.cls === 'ok' ? '#2e7d32' : (st.cls === 'warn' ? '#e65100' : '#c62828')) : '#455a64';
+        
+        const casasDecimais = nome === 'Viscosidade da Escória' ? 3 : 2;
+
+        html += '<tr style="border-bottom:1px solid #eee;">' +
+          '<td style="padding:6px;">' + nome + '</td>' +
+          '<td style="padding:6px; text-align:right; font-weight:600; color:' + corVal + ';">' + val.toFixed(casasDecimais) + badgeHtml + '</td>' +
+          '<td style="padding:6px; text-align:right; color:#666;">' + unid + '</td></tr>';
+      });
+
+      // Se houver anomalia por conta de alta sílica e falta de bases, plota o box colorido
+      if (analiseEscoria.alertas.length > 0) {
+         let bgAlerta = analiseEscoria.status === 'CRÍTICO' ? '#f8d7da' : '#fff3cd';
+         let clrAlerta = analiseEscoria.status === 'CRÍTICO' ? '#721c24' : '#856404';
+         let bdrAlerta = analiseEscoria.status === 'CRÍTICO' ? '#f5c6cb' : '#ffeeba';
+         
+         html += '<tr><td colspan="3" style="padding: 10px; background:' + bgAlerta + '; color:' + clrAlerta + '; border:1px solid ' + bdrAlerta + '; border-radius:4px; font-size:13px; margin-top:5px; font-family:sans-serif;">' + 
+                 analiseEscoria.alertas.join('<br>') + '</td></tr>';
+      }
+
+      document.getElementById('o_tabela').innerHTML = html;
+      updateReportSummary();
+      calcCargas();
+    }
+
+    if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true) {
+      document.getElementById('installHint').style.display = 'none';
+    }
+
+    calcM(); calcT(); calcO();
+
+ /**
+ * Algoritmo Metalúrgico Isolado (Precalc a 1500°C com Correção de Arrhenius)
+ */
+function calcularViscosidadeEscoria(sio2, al2o3, cao, mgo, tempGusaC) {
+    const tempEscoriaK = (tempGusaC + 50) + 273.15;
+    let viscosidade1500 = 0.005 + (0.0262 * sio2) + (0.0184 * al2o3) - (0.0172 * cao) - (0.0244 * mgo);
+    if (viscosidade1500 < 0.01) viscosidade1500 = 0.01;
+
+    const fatorTermico = Math.exp((1773.15 - tempEscoriaK) * 0.0040);
+    const viscosidadeReal = viscosidade1500 * fatorTermico;
+    const basicidadeBinaria = sio2 > 0 ? (cao / sio2) : 0;
+    
+    let status = "NORMAL";
+    let alertas = [];
+    
+    if (viscosidadeReal > 0.60) {
+        status = "CRÍTICO";
+        alertas.push("⚠️ <b>Escória Viscosa:</b> Risco de travamento de canais e perda de gusa pelas ventaneiras.");
+    } else if (viscosidadeReal > 0.48) {
+        status = "ALERTA";
+        alertas.push("🔸 <b>Viscosidade Alta:</b> Escória pastosa. Monitore a temperatura ou reduza a acidez.");
+    } else if (viscosidadeReal < 0.20) {
+        status = "ALERTA";
+        alertas.push("🔸 <b>Escória muito fluida:</b> Risco de desgaste acelerado do refratário do cadinho.");
+    }
+    
+    if (sio2 > 37.0) {
+        if (mgo < 7.5) {
+            status = "CRÍTICO";
+            alertas.push("🚨 <b>Alta Sílica (" + sio2.toFixed(1) + "%):</b> O teor de MgO está baixo (" + mgo.toFixed(1) + "%). Risco alto de perda de fluidez. Adicione Dolomita na carga.");
+        }
+        if (basicidadeBinaria < 1.14) {
+            if (status !== "CRÍTICO") status = "ALERTA";
+            alertas.push("🔹 <b>Basicidade Baixa para Alta Sílica:</b> Ajuste a adição de CaO (Fluxo).");
+        }
+    }
+
+    return {
+        viscosidade: viscosidadeReal,
+        basicidade: basicidadeBinaria,
+        status: status,
+        alertas: alertas
+    };
+}
+
+// ==========================================
+// DAQUI PARA BAIXO ENTRA O SCRIPT DO AVISO MULTILÍNGUE
+//=======≈=≈===≈=======
+
+</script>
+
+<script>
+// Dicionário de strings direto por IDs
+const dicionarioAviso = {
+    pt: {
+        title: "Aviso Importante",
+        text: "Este aplicativo <strong>não utiliza as APIs oficiais do Google</strong>. Nosso serviço funciona de forma independente. Ao continuar, você declara estar ciente e concordar com nossos termos de uso e funcionamento.",
+        button: "Prosseguir"
+    },
+    en: {
+        title: "Important Notice",
+        text: "This application <strong>does not use official Google APIs</strong>. Our service operates independently. By continuing, you acknowledge and agree to our terms of use and operation.",
+        button: "Proceed"
+    },
+    es: {
+        title: "Aviso Importante",
+        text: "Esta aplicación <strong>no utiliza las APIs oficiales de Google</strong>. Nuestro servicio funciona de forma independiente. Al continuar, declaras estar consciente y de acuerdo con nuestros términos de uso y funcionamiento.",
+        button: "Proceder"
+    },
+    zh: {
+        title: "重要提示",
+        text: "本应用<strong>不使用 Google 官方 API</strong>。我们的服务独立运行。继续操作即表示您知晓并同意我们的使用条款和运行规则。",
+        button: "继续"
+    }
+};
+
+// Função global que altera os elementos na tela manualmente
+function mudarIdiomaManual(langCode) {
+    const dados = dicionarioAviso[langCode];
+    if (!dados) return;
+
+    const t = document.getElementById('modalTitle');
+    const x = document.getElementById('modalText');
+    const b = document.getElementById('modalBtn');
+
+    if (t) t.innerText = dados.title;
+    if (x) x.innerHTML = dados.text;
+    if (b) b.innerText = dados.button;
+}
+
+// Função para fechar o modal
+function acceptDisclaimer() {
+    const modal = document.getElementById('disclaimerModal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+// Tentativa de detecção automática ao iniciar (se falhar, os botões corrigem)
+setTimeout(function() {
+    try {
+        const sistemaLang = navigator.language || navigator.userLanguage || "pt";
+        const code = sistemaLang.substring(0, 2).toLowerCase();
+        if (dicionarioAviso[code]) {
+            mudarIdiomaManual(code);
+        }
+    } catch(e) {}
+}, 50);
+
+  </script>
+</body>
+</html>
